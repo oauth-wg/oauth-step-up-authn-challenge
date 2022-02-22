@@ -1,4 +1,4 @@
-Prospective OAuth 2.0 Step-up Authentication Challenge Protocol
+[Prospective] OAuth 2.0 Step-up Authentication Challenge Protocol draft
 
 
 `main.md` is the source in markdown format. 
