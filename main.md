@@ -158,7 +158,7 @@ Authorization servers and resource servers MAY elect to use other encoding and v
 
 ## JWT Access Tokens
 
-When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. The following is a conceptual example showing the decoded content of such a JWT access token.
+When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. It is useful to bear in mind that the values of those two parameters are established at user authentication time and won't change in the event of access token renewals. See the aforementioned Section 2.2.1 of [@!RFC9068] for details. The following is a conceptual example showing the decoded content of such a JWT access token.
 
 !---
 ~~~ 
