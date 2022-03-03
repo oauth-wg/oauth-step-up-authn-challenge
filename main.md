@@ -156,34 +156,45 @@ Although [@OIDC] leaves the authorization server free to decide how to handle th
 To evaluate whether an access token meets the protected resource's requirements, the resource servers needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
 Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document. 
 
-## JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens
+## JWT Access Tokens
 
-https://datatracker.ietf.org/doc/html/rfc9068#section-2.2.1 [[TBD]]
+When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. The following is a conceptual example showing the decoded content of such a JWT access token.
+
 !---
 ~~~ 
 Header:
 
-{"typ":"at+JWT","alg":"RS256","kid":"RjEwOwOA"}
+{"typ":"at+JWT","alg":"RS256","kid":"LTacESbw"}
  
 Claims: 
 
 {
  "iss": "https://as.example.net",
- "sub": "5ba552d67",
+ "sub": "someone@example.net",
  "aud": "https://rs.example.com",
- "exp": 1639528912,
- "iat": 1618354090,
- "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
+ "exp": 1646343000,
+ "iat": 1646340200,
+ "jti" : "e1j3V_bKic8-LAEB_lccD0G",
  "client_id": "s6BhdRkqt3",
- "scope": "purchase"
+ "scope": "purchase",
+ "auth_time": 1646340198,
  "acr": "myACR"
 }
 ~~~
 !---
 
-## OAuth 2.0 Token Introspection
+## OAuth 2.0 Token Introspection {#intro}
 
-auth_time and acr as defined Introspection response parameters [[TBD]]
+OAuth 2.0 Token Introspection [@!RFC7662] defines a method for a protected resource to query an authorization server about the active state of an access token as well as to determine metainformation about the token.
+The following two top-level introspection response members are defined to convey information about the user authentication event that the authentication server performed during the course of obtaining the access token.
+
+`acr`
+:   Authentication Context Class Reference. String specifying an Authentication Context Class Reference value that identifies the Authentication Context Class that the user authentication performed satisfied.
+
+`auth_time`
+:   Time when the user authentication occurred. A JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the time of date/time of the authentication event.
+
+The following example shows an introspection response with information about the user authentication event by which the access token was obtained. 
 
 !---
 ~~~ 
@@ -194,11 +205,12 @@ Content-Type: application/json
   "active": true,
   "client_id": "s6BhdRkqt3",
   "scope": "purchase",
-  "sub": "5ba552d67",
+  "sub": "someone@example.net",
   "aud": "https://rs.example.com",
   "iss": "https://as.example.net",
   "exp": 1639528912,
   "iat": 1618354090,
+  "auth_time": 1646340198,
   "acr": "myACR"
 }
 ~~~
@@ -210,7 +222,6 @@ Content-Type: application/json
 
 Remember that oauth is not authN, you need a layer like OIDC to handle that part. This is not an encouragement to abuse oauth. This is about the authentication event of the user to the AS by which the access token was obtained.  
 
-[[TBD]]
 
 # IANA Considerations {#IANA}
       
@@ -218,11 +229,10 @@ Remember that oauth is not authN, you need a layer like OIDC to handle that part
 
 The `insufficient_user_authentication` error code in the "OAuth Extensions Error" registry [@IANA.OAuth.Params].
 
-`acr` and `auth_time` as top-level members of the introspection response in the "OAuth Token Introspection Response" registry [@IANA.OAuth.Params].
+(#intro) for `acr` and `auth_time` as top-level members of the introspection response in the "OAuth Token Introspection Response" registry [@IANA.OAuth.Params].
 
 The `acr_values` and `max_age` `WWW-Authenticate` auth-params are "new" but doesn't seem like any registration is needed or possible.
 
-[[TBD]]
 
 
 
@@ -277,20 +287,6 @@ Initially (kinda) discussed at the OAuth Security Workshop 2021
 
 A number of others already but haven't kept track... 
 
-
-# RUDE FAQ
-
-[[TBD]]
-
-What about the OIDC Claims parameter?
-
-Why just auth levels and not more?
-
-ACR vs AMR
-
-Bearer, what about other schemes?
-
-[[TBD]]
 
 
 # Document History
