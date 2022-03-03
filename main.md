@@ -141,8 +141,8 @@ Both `acr_values` and `max_age` authorization request parameters are OPTIONAL pa
 The example request below indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
 ~~~ 
-GET https://authorizationserver.com/authorize 
-?client_id=xHMM_&response_type=code&scope=purchase&acr_values=myACR
+GET https://as.example.net/authorize?client_id=s6BhdRkqt3
+&response_type=code&scope=purchase&acr_values=myACR
 ~~~
 !---
 
@@ -161,18 +161,23 @@ Authorization servers and resource servers MAY elect to use other encoding and v
 https://datatracker.ietf.org/doc/html/rfc9068#section-2.2.1 [[TBD]]
 !---
 ~~~ 
- {"typ":"at+JWT","alg":"RS256","kid":"RjEwOwOA"}
-   {
-     "iss": "https://authorizationserver.com/",
-     "sub": "5ba552d67",
-     "aud":   "https://example.com/",
-     "exp": 1639528912,
-     "iat": 1618354090,
-     "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
-     "client_id": "s6BhdRkqt3",
-     "scope": "purchase"
-     "acr": "myACR"
-   }
+Header:
+
+{"typ":"at+JWT","alg":"RS256","kid":"RjEwOwOA"}
+ 
+Claims: 
+
+{
+ "iss": "https://as.example.net",
+ "sub": "5ba552d67",
+ "aud": "https://rs.example.com",
+ "exp": 1639528912,
+ "iat": 1618354090,
+ "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
+ "client_id": "s6BhdRkqt3",
+ "scope": "purchase"
+ "acr": "myACR"
+}
 ~~~
 !---
 
@@ -182,20 +187,20 @@ auth_time and acr as defined Introspection response parameters [[TBD]]
 
 !---
 ~~~ 
-   HTTP/1.1 200 OK
-     Content-Type: application/json
+HTTP/1.1 200 OK
+Content-Type: application/json
 
-     {
-      "active": true,
-      "client_id": "s6BhdRkqt3",
-      "scope": "purchase",
-      "sub": "5ba552d67",
-      "aud": "https://example.com/",
-      "iss": "https://authorizationserver.com/",
-      "exp": 1639528912,
-      "iat": 1618354090,
-      "acr": "myACR"
-     }
+{
+  "active": true,
+  "client_id": "s6BhdRkqt3",
+  "scope": "purchase",
+  "sub": "5ba552d67",
+  "aud": "https://rs.example.com",
+  "iss": "https://as.example.net",
+  "exp": 1639528912,
+  "iat": 1618354090,
+  "acr": "myACR"
+}
 ~~~
 !---
 
