@@ -126,7 +126,7 @@ Below you can find an example of `WWW-Authenticate` header using the `insufficie
 !---
 ~~~ 
 HTTP/1.1 401 Unauthorized
-WWW-Authenticate: error="insufficient_authentication_level",
+WWW-Authenticate: error="insufficient_user_authentication",
   error_description=“A different authentication level is required",
   acr_values="myACR"
 ~~~
