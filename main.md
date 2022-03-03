@@ -121,7 +121,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 `max_age`
 :   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token.
 
-Below you can find an example of `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level correponds to the authentication context class reference identified by `myACR`. 
+Below you can find an example of `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
 !---
 ~~~ 
@@ -135,7 +135,7 @@ WWW-Authenticate: error="insufficient_user_authentication",
 
 # Authorization Request
 
-A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the correponding requirements.
+A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the corresponding requirements.
 Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See Section (#AuthzResp) for more details.
 
 The example request below indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
@@ -147,11 +147,11 @@ GET https://authorizationserver.com/authorize
 !---
 
 # Authorization Response {#AuthzResp}
-Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the  `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting IDToken. The same section also establishes that in case the desired aauthentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes thee `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued IDtoken.
-An authorization server complying with this specification will react to the presence of the `acr_values` and `max_age` parameters by including `acr` and `auth_time` in the access token (see for details) in the same way as [@OIDC] does for IDtokens.
-Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in IDtoken when requested via `acr_values`, when it comes to access tokens in this specification it is RECOMMENDED that the requested `acr` value is treated as essential claim. That is, the requested `acr` value is included in the access token if the authentication operation succesfully met its requirements, or that the authorizarion request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help getting clients stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
+Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting ID Token. The same section also establishes that in case the desired authentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes thee `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued ID Token.
+An authorization server complying with this specification will react to the presence of the `acr_values` and `max_age` parameters by including `acr` and `auth_time` in the access token (see (#authn-info-in-at) for details).
+Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in ID Token when requested via `acr_values`, when it comes to access tokens in this specification it is RECOMMENDED that the requested `acr` value is treated as required for successfully fulfilling the request. That is, the requested `acr` value is included in the access token if the authentication operation successfully met its requirements, or that the authorization request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help prevent clients getting stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
 
-# Authentication Information Conveyed via Access Token
+# Authentication Information Conveyed via Access Token {#authn-info-in-at}
 
 To evaluate whether an access token meets the protected resource's requirements, the resource servers needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
 Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document. 
@@ -198,10 +198,6 @@ auth_time and acr as defined Introspection response parameters [[TBD]]
      }
 ~~~
 !---
-
-# Authorization Server Metadata
-
-[[TBD]] ? 
 
 # Security Considerations {#Security}
 
