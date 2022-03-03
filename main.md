@@ -103,40 +103,100 @@ Other methods of determining the authentication level by which the access token 
 
 # Authentication Requirements Challenge
 
-[[TBD]]  ... new error code value for the `error` parameter of [@!RFC6750] or authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the `error` parameter:
+
+This specification introduces a new error code value for the `error` parameter of [@!RFC6750] or authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the `error` parameter:
 
 `insufficient_user_authentication`
 :   The authentication event associated with the access token presented with the request doesn't meet the authentication requirements of the protected resource.
 
+Note: the logic through which the resource server determines that the current request doesn't meet the authentication requirements of the protected resource, and associated functionality (such as expressing, deploying and publishing such requirements) is out of scope for this document.
 
-[[TBD]]  ... additional `WWW-Authenticate` auth-param values to convey the authentication requirements 
+Furthermore, this specification defines additional `WWW-Authenticate` auth-param values to convey the authentication requirements back to the client.
 
 `acr_values`
 :   A space-separated string indicating, in order of preference, the authentication context class reference values that the protected resource requires the authentication event associated with the access token.
 
+
+
 `max_age`
 :   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token.
 
-Examples...  [[TBD]]
+Below you can find an example of `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level correponds to the authentication context class reference identified by `myACR`. 
+
+!---
+~~~ 
+HTTP/1.1 401 Unauthorized
+    WWW-Authenticate: error="insufficient_authentication_level",
+        error_description=“A different authentication level is required", acr_values="myACR"
+~~~
+!---
 
 
 # Authorization Request
 
-[[TBD]] ... somehow nicely point to [@OIDC]'s `acr_values` and `max_age` authorization request parameters and say they can be used with a regular old authorization server.
+A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the correponding requirements.
+Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See Section (#AuthzResp) for more details.
 
-Examples...  [[TBD]]
+The example request below indicates to the authorization server that the client would like the authentication to occur according to the the authentication context class reference identified by `myACR`.
+!---
+~~~ 
+GET https://authorizationserver.com/authorize 
+?client_id=xHMM_&response_type=code&scope=purchase&acr_values=myACR
+~~~
+!---
+
+# Authorization Response {#AuthzResp}
+Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the  `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting IDToken. The same section also establishes that in case the desired aauthentication level cannot be met, the authorization server SHOULD include in the the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes thee `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued IDtoken.
+An authorization server complying with this specification will react to the presence of the `acr_values` and `max_age` parameters by including `acr` and `auth_time` in the access token (see for details) in the same way as [@OIDC] does for IDtokens.
+Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in IDtoken when requested via `acr_values`, when it comes to access tokens in this specification it is RECOMMENDED that the requested `acr` value is treated as essential claim. That is, the requested `acr` value is included in the access token if the authentication operation succesfully met its requirements, or that the authorizarion request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help getting clients stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
 
 # Authentication Information Conveyed via Access Token
 
-[[TBD]] ... resource servers needs a way of accessing information about the authentication event by which the access token was obtained ... this is conveyed with/in the access token ... JWT and Introspection ... others out of scope. 
+To evaluate whether an access token meets the protected resource's requirements, the resource servers needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
+Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document. 
 
-## JWT
+## JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens
 
 https://datatracker.ietf.org/doc/html/rfc9068#section-2.2.1 [[TBD]]
+!---
+~~~ 
+ {"typ":"at+JWT","alg":"RS256","kid":"RjEwOwOA"}
+   {
+     "iss": "https://authorizationserver.com/",
+     "sub": "5ba552d67",
+     "aud":   "https://example.com/",
+     "exp": 1639528912,
+     "iat": 1618354090,
+     "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
+     "client_id": "s6BhdRkqt3",
+     "scope": "purchase"
+     "acr": "myACR"
+   }
+~~~
+!---
 
-## Token Introspection
+## OAuth 2.0 Token Introspection
 
 auth_time and acr as defined Introspection response parameters [[TBD]]
+
+!---
+~~~ 
+   HTTP/1.1 200 OK
+     Content-Type: application/json
+
+     {
+      "active": true,
+      "client_id": "s6BhdRkqt3",
+      "scope": "purchase",
+      "sub": "5ba552d67",
+      "aud": "https://example.com/",
+      "iss": "https://authorizationserver.com/",
+      "exp": 1639528912,
+      "iat": 1618354090,
+      "acr": "myACR"
+     }
+~~~
+!---
 
 # Authorization Server Metadata
 
@@ -186,6 +246,15 @@ The `acr_values` and `max_age` `WWW-Authenticate` auth-params are "new" but does
   </front>
 </reference>
 
+<reference anchor="OIDCUAR" target="https://openid.net/specs/openid-connect-unmet-authentication-requirements-1_0.html">
+  <front>
+    <title>OpenID Connect Core Error Code unmet_authentication_requirements</title>
+    <author initials="T." surname="Lodderstedt" fullname="Torsten Lodderstedt">
+      <organization>YES</organization>
+    </author>
+   <date day="8" month="May" year="2019"/>
+  </front>
+</reference>
 
 <reference anchor="IANA.OAuth.Params" target="https://www.iana.org/assignments/oauth-parameters">
  <front>
