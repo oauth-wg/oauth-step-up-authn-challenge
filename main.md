@@ -132,7 +132,7 @@ WWW-Authenticate: Bearer error="insufficient_user_authentication",
 ~~~
 !---
 
-If the resource server determines that the request is also lacking the scopes required by the requested resource, it MAY include the "scope" attribute with the scope necessary to access the protected resource, as described in section 3.1 of [@!RFC6750].
+If the resource server determines that the request is also lacking the scopes required by the requested resource, it MAY include the `scope` attribute with the scope necessary to access the protected resource, as described in section 3.1 of [@!RFC6750].
 
 # Authorization Request
 
@@ -293,6 +293,11 @@ A number of others already but haven't kept track...
 # Document History
 
    [[ To be removed from the final specification ]]
+
+   -01
+
+   * Fixed example
+   * Clarified/noted that scope can also be in the WWW-Authenticate/401
 
    -00
 
