@@ -8,7 +8,7 @@ keyword = ["security", "oauth2", "openid connect", "oauth", "step-up"]
 
 [seriesInfo]
 name = "Internet-Draft"
-value = "draft-bertocci-oauth-step-up-authn-challenge-01"
+value = "draft-ietf-oauth-step-up-authn-challenge-00"
 stream = "IETF"
 status = "standard"
 
@@ -293,6 +293,10 @@ A number of others already but haven't kept track...
 # Document History
 
    [[ To be removed from the final specification ]]
+
+-00 (Working Group Draft)
+
+* Initial WG revision
 
    -01
 
