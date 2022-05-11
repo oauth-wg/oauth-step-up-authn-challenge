@@ -296,7 +296,7 @@ A number of others already but haven't kept track...
 
 -00 (Working Group Draft)
 
-* Initial WG revision
+* Initial WG revision (content unchanged from draft-bertocci-oauth-step-up-authn-challenge-01)
 
    -01
 
