@@ -326,11 +326,11 @@ A number of others already but haven't kept track...
 
 * Initial WG revision (content unchanged from draft-bertocci-oauth-step-up-authn-challenge-01)
 
-   -01
+-01 draft-bertocci-oauth-step-up-authn-challenge
 
-   * Fixed example
-   * Clarified/noted that scope can also be in the WWW-Authenticate/401
+* Fixed example
+* Clarified/noted that scope can also be in the WWW-Authenticate/401
 
-   -00
+-00 draft-bertocci-oauth-step-up-authn-challenge
 
-   * Initial Individual Draft (with all the authority thereby bestowed [@I-D.abr-twitter-reply]).
+* Initial Individual Draft (with all the authority thereby bestowed [@I-D.abr-twitter-reply]).
