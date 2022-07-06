@@ -101,6 +101,8 @@ Figure: Abstract protocol flow {#abstract-flow}
 The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication level by which the access token was obtained. This document will describe how the resource server can perform that determination when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662]. 
 Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification.
 
+Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not be necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This isn't a new requirement for clients, as incremental consent and least privilege principles will require simialr heuristics for managing access tokens associated to different scopes and permission levels. This document doesn't recomment any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario.     
+
 # Authentication Requirements Challenge
 
 
@@ -217,6 +219,10 @@ Content-Type: application/json
 ~~~
 !---
 
+# Authorization Server Metadata {#ASMetadata}
+
+Authorization Servers can advertise their support of this specification by including in their metadata document (as defined in [@!RFC8414]) the value `acr_values_supported` as defined in section 3 of [@OIDCDISC]. The presence of `acr_values_supported` in the authorization server metadata document signals that the authorization server will understand and honor the`acr_values` and `max_age` parameters in incoming authorization requests.
+
 # Security Considerations {#Security}
 
 [[TBD]]
@@ -255,6 +261,26 @@ The `acr_values` and `max_age` `WWW-Authenticate` auth-params are "new" but does
     <author initials="C." surname="Mortimore" fullname="Chuck Mortimore">
       <organization>Salesforce</organization>
     </author>
+   <date day="8" month="Nov" year="2014"/>
+  </front>
+</reference>
+
+<reference anchor="OIDCDISC" target="https://openid.net/specs/openid-connect-discovery-1_0.htm">
+  <front>
+    <title>OpenID Connect Core 1.0 incorporating errata set 1</title>
+    <author initials="N." surname="Sakimura" fullname="Nat Sakimura">
+      <organization>NRI</organization>
+    </author>
+    <author initials="J." surname="Bradley" fullname="John Bradley">
+      <organization>Ping Identity</organization>
+    </author>
+    <author initials="M." surname="Jones" fullname="Mike Jones">
+      <organization>Microsoft</organization>
+    </author>
+    <author initials="E." surname="Jay" fullname="Edmund Jay">
+      <organization>Illumila</organization>
+    </author>
+
    <date day="8" month="Nov" year="2014"/>
   </front>
 </reference>
