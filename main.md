@@ -322,6 +322,9 @@ A number of others already but haven't kept track...
 
 -01
 
+* Added AS Metadata section with pointer to `acr_values_supported` 
+* Mention that it's not necessarily the case that a new 'stepped-up' token always supersedes older tokens
+
 -00 (Working Group Draft)
 
 * Initial WG revision (content unchanged from draft-bertocci-oauth-step-up-authn-challenge-01)
