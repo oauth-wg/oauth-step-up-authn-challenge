@@ -123,7 +123,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 `max_age`
 :   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token.
 
-Below you can find an example of `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
+(#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
 !---
 ~~~ 
@@ -133,6 +133,20 @@ WWW-Authenticate: Bearer error="insufficient_user_authentication",
   acr_values="myACR"
 ~~~
 !---
+Figure: Authentication Requirements Challenge indicating `acr_values` {#acr-challenge}
+
+The following example in (#age-challenge) shows a challenge informing the client that last active authentication event associated with the presented access token is too old and a more recent authentication is needed.
+
+!---
+~~~
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer error="insufficient_user_authentication",
+  error_description="More recent authentication is required",
+  max_age="5"
+~~~
+!---
+Figure: Authentication Requirements Challenge indicating `max_age` {#age-challenge}
+
 
 If the resource server determines that the request is also lacking the scopes required by the requested resource, it MAY include the `scope` attribute with the scope necessary to access the protected resource, as described in section 3.1 of [@!RFC6750].
 
@@ -141,13 +155,24 @@ If the resource server determines that the request is also lacking the scopes re
 A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the corresponding requirements.
 Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See Section (#AuthzResp) for more details.
 
-The example request below indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
+The example request below, which might occur after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
 ~~~ 
 GET https://as.example.net/authorize?client_id=s6BhdRkqt3
 &response_type=code&scope=purchase&acr_values=myACR
 ~~~
 !---
+Figure: Authorization Request indicating `acr_values`
+
+
+Subsequent to the challenge in (#age-challenge), a client might make the following example request that indicates to the authorization server that the user authentication event needs to have occurred no more than five seconds prior.
+!---
+~~~
+GET https://as.example.net/authorize?client_id=s6BhdRkqt3
+&response_type=code&scope=purchase&max_age=5
+~~~
+!---
+Figure: Authorization Request indicating `max_age`
 
 # Authorization Response {#AuthzResp}
 Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting ID Token. The same section also establishes that in case the desired authentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes thee `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued ID Token.
@@ -324,6 +349,7 @@ A number of others already but haven't kept track...
 
 * Added AS Metadata section with pointer to `acr_values_supported` 
 * Mention that it's not necessarily the case that a new 'stepped-up' token always supersedes older tokens
+* Add examples with `max_age`
 
 -00 (Working Group Draft)
 
