@@ -103,7 +103,7 @@ Other methods of determining the authentication level by which the access token 
 
 Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not be necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This isn't a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document doesn't recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario.
 
-# Authentication Requirements Challenge
+# Authentication Requirements Challenge {#Challenge}
 
 
 This specification introduces a new error code value for the `error` parameter of [@!RFC6750] or authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the `error` parameter:
@@ -148,6 +148,7 @@ WWW-Authenticate: Bearer error="insufficient_user_authentication",
 Figure: Authentication Requirements Challenge indicating `max_age` {#age-challenge}
 
 
+The auth-params `max_age` and `acr_values` MAY both occur in the same challenge if the resource server needs to express requirements both about recency and authentication levels.
 If the resource server determines that the request is also lacking the scopes required by the requested resource, it MAY include the `scope` attribute with the scope necessary to access the protected resource, as described in section 3.1 of [@!RFC6750].
 
 # Authorization Request
@@ -248,12 +249,19 @@ Content-Type: application/json
 
 Authorization Servers can advertise their support of this specification by including in their metadata document (as defined in [@!RFC8414]) the value `acr_values_supported` as defined in section 3 of [@OIDCDISC]. The presence of `acr_values_supported` in the authorization server metadata document signals that the authorization server will understand and honor the `acr_values` and `max_age` parameters in incoming authorization requests.
 
+# Deployment Considerations {#Deployment}
+
+[[TBD]]
+This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it's important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to any undesirable user experience outcomes. 
+The authentication prompts presented by the authorization server as a result of the requirements propagation method described here might require the user to perform some specific actions such as using multiple devices, having access to devices complying with specific security requirements, and so on. Those extra requirements, concerning more about how to comply with a particular requirement rather than indicating the identifier of the requirement itself, are out of scope for this specification.
+
 # Security Considerations {#Security}
 
 [[TBD]]
 
-Remember that oauth is not authN, you need a layer like OIDC to handle that part. This is not an encouragement to abuse oauth. This is about the authentication event of the user to the AS by which the access token was obtained.  
-
+This document should be in no circumstance used to position OAuth as an authentication protocol. The specification focuses on the authentication event of the user with the authorization server by which the access token was obtained, so that its characteristics can be evaluated by a resource server to determine whether they meet its requirements, but relies on a separate authentication layer to take care of the mechanics leading to that event. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (OpenID Connect, for instance) and so forth. 
+Depending on the policies adopted by the resource server, the "acr_values" parameter introduced in {#Challenge} might unintentionally disclose information about the authenticated user, the resource itself, the authorization server and any other context specific data that an attacker might use to gain knowledge about their target. Implementers should use care in determining what to disclose in the challenge and in what circumstances.  
+The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection or any other method. The resource server is free to choose whatever method fits best for its needs, however it's important to remember that returning a challenge without having verified that the caller presented a valid token (according to the validation method of choice) might mean disclosing information to an actor that didn't prove it had the ability to obtain a valid token for the resource server, albeit of insufficient level.
 
 # IANA Considerations {#IANA}
       
@@ -356,6 +364,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -03
+* Clarified that `acr_values` and `max_age` can co-occur in the challenge when necessary
+* fleshed out deployment and security considerations
 
 -02
 
