@@ -5,8 +5,7 @@ https://datatracker.ietf.org/doc/draft-ietf-oauth-step-up-authn-challenge/
 
 ---
 
-
-`main.md` is the source in markdown format.
+[main.md](main.md.md) is the source in markdown format.
 
 To build the xml2rfc file and transform it into html (you'll need https://github.com/mmarkdown/mmark and https://pypi.org/project/xml2rfc/):
 
