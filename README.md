@@ -1,4 +1,9 @@
-[Prospective draft] OAuth 2.0 Step-up Authentication Challenge Protocol
+[WG draft] OAuth 2.0 Step-up Authentication Challenge Protocol
+
+Datatracker:
+https://datatracker.ietf.org/doc/draft-ietf-oauth-step-up-authn-challenge/ 
+
+---
 
 
 `main.md` is the source in markdown format.
