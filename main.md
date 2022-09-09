@@ -116,8 +116,7 @@ Note: the logic through which the resource server determines that the current re
 Furthermore, this specification defines additional `WWW-Authenticate` auth-param values to convey the authentication requirements back to the client.
 
 `acr_values`
-:   A space-separated string indicating, in order of preference, the authentication context class reference values that the protected resource requires the authentication event associated with the access token.
-
+:   A space-separated string listing the authentication context class reference values, in order of preference, one of which the protected resource requires for the authentication event associated with the access token.
 
 
 `max_age`
@@ -366,6 +365,7 @@ collaboration and community input.
 -03
 * Clarified that `acr_values` and `max_age` can co-occur in the challenge when necessary
 * fleshed out deployment and security considerations
+* Attempt to clarify that while acr_values can request more then one value, only one of them is used and ends up in the token
 
 -02
 
