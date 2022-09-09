@@ -211,7 +211,7 @@ Claims:
 ~~~
 !---
 
-## OAuth 2.0 Token Introspection {#intro}
+## OAuth 2.0 Token Introspection {#introspect}
 
 OAuth 2.0 Token Introspection [@!RFC7662] defines a method for a protected resource to query an authorization server about the active state of an access token as well as to determine metainformation about the token.
 The following two top-level introspection response members are defined to convey information about the user authentication event that the authentication server performed during the course of obtaining the access token.
@@ -260,15 +260,35 @@ Depending on the policies adopted by the resource server, the `acr_values` param
 The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server is free to choose whatever method fits best for its needs, however, it's important to remember that returning a challenge without having verified that the caller presented a valid token (according to the validation method of choice) might mean disclosing information to an actor that didn't prove it had the ability to obtain a valid token for the resource server, albeit of insufficient level.
 
 # IANA Considerations {#IANA}
-      
-[[TBD]]  
 
-The `insufficient_user_authentication` error code in the "OAuth Extensions Error" registry [@IANA.OAuth.Params].
+##  OAuth Extensions Error Registration
 
-(#intro) for `acr` and `auth_time` as top-level members of the introspection response in the "OAuth Token Introspection Response" registry [@IANA.OAuth.Params].
+This specification requests registration of the following error value in the "OAuth Extensions Error" registry [@IANA.OAuth.Params] established by [@!RFC6749].
 
-The `acr_values` and `max_age` `WWW-Authenticate` auth-params are "new" but doesn't seem like any registration is needed or possible.
+* Name: `insufficient_user_authentication`
+* Usage Location: resource access error response
+* Protocol Extension: OAuth 2.0 Step-up Authentication Challenge Protocol
+* Change controller: IETF
+* Specification document(s): (#Challenge) of [[ this specification ]]
 
+
+## OAuth Token Introspection Response Registration
+
+This specification requests registration of the following values in the "OAuth Token Introspection Response" registry [@IANA.OAuth.Params] established by [@RFC7662].
+
+Authentication Context Class Reference:
+
+* Name: `acr`
+* Description: Authentication Context Class Reference
+* Change Controller: IESG
+* Specification Document(s): (#introspect) of [[ this specification ]]
+
+Authentication Time:
+
+* Name: `auth_time`
+* Description: Time when the user authentication occurred
+* Change Controller: IESG
+* Specification Document(s): (#introspect) of [[ this specification ]]
 
 
 
@@ -362,6 +382,7 @@ collaboration and community input.
 -03
 * Clarified that `acr_values` and `max_age` can co-occur in the challenge when necessary
 * fleshed out deployment and security considerations
+* fleshed out IANA considerations
 * Attempt to clarify that while acr_values can request more then one value, only one of them is used and ends up in the token
 
 -02
