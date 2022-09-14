@@ -381,10 +381,11 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -03
+
 * Clarified that `acr_values` and `max_age` can co-occur in the challenge when necessary
 * fleshed out deployment and security considerations
 * fleshed out IANA considerations
-* Attempt to clarify that while acr_values can request more than one value, only one of them is used and ends up in the token
+* Attempt to clarify that while `acr_values` can request more than one value, only one of them is used and ends up in the token
 
 -02
 
