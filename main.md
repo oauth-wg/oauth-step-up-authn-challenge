@@ -366,6 +366,7 @@ Area Directors. Additionally, the following individuals contributed
 ideas, feedback, corrections, and wording that helped shape this specification:
 Ivan Kanakarakis,
 Pieter Kasselman,
+Aaron Parecki,
 and
 Filip Skokan.
 
