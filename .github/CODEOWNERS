@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-oauth-step-up-authn-challenge.md vittorio@auth0.com bcampbell@pingidentity.com
