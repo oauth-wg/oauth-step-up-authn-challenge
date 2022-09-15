@@ -8,7 +8,7 @@ keyword = ["security", "oauth2", "openid connect", "oauth", "step-up"]
 
 [seriesInfo]
 name = "Internet-Draft"
-value = "draft-ietf-oauth-step-up-authn-challenge-04"
+value = "draft-ietf-oauth-step-up-authn-challenge-latest"
 stream = "IETF"
 status = "standard"
 
