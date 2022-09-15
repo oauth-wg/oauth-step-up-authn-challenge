@@ -27,13 +27,13 @@ fullname="Brian Campbell"
 organization="Ping Identity"
     [author.address]
     email = "bcampbell@pingidentity.com"
-    
-    
+
+
 %%%
 
-.# Abstract 
+.# Abstract
 
-It is not uncommon for resource servers to require different authentication strengths or freshness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request doesn't meet its authentication requirements and specify how to meet them. 
+It is not uncommon for resource servers to require different authentication strengths or freshness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request doesn't meet its authentication requirements and specify how to meet them.
 This document also codifies a mechanism for a client to request that an authorization server achieve a specific authentication strength or freshness when processing an authorization request.
 
 {mainmatter}
@@ -42,10 +42,10 @@ This document also codifies a mechanism for a client to request that an authoriz
 
 In simple API authorization scenarios, an authorization server will statically determine what authentication technique to use to handle a given request on the basis of aspects such as the scopes requested, the resource, the identity of the client and other characteristics known at provisioning time.
 Although the approach is viable in many situations, it falls short in several important circumstances. Consider, for instance, an eCommerce API requiring different authentication strengths depending on whether the item being purchased exceeds a certain threshold, dynamically estimated by the API itself using a logic that is opaque to the authorization server.
-An API might also determine that  a more recent user authentication is required based on its own risk evaluation of the API request.  
+An API might also determine that  a more recent user authentication is required based on its own risk evaluation of the API request.
 
 This document extends the error codes collection defined by [@!RFC6750] with a new value, `insufficient_user_authentication`, which can be used by resource servers to signal to the client that the authentication event associated with the access token presented with the request doesn't meet the authentication requirements of the resource server.
-This document also introduces `acr_values` and `max_age` parameters for the `WWW-Authenticate` response header defined by [@!RFC6750], which the resource server can use to explicitly communicate to the client the required authentication strength or recentness. 
+This document also introduces `acr_values` and `max_age` parameters for the `WWW-Authenticate` response header defined by [@!RFC6750], which the resource server can use to explicitly communicate to the client the required authentication strength or recentness.
 
 The client can use that information to reach back to the authorization server with an authorization request specifying the authentication requirements indicated by protected resource, by including the `acr_values` or `max_age` parameter as defined in [@OIDC].
 
@@ -64,7 +64,7 @@ Following is an end-to-end sequence of a typical step-up authentication scenario
 The scenario assumes that, before the sequence described below takes place, the client already obtained an access token for the protected resource.
 
 !---
-~~~ 
+~~~
  +----------+                                +--------------+
  |          |                                |              |
  |          |-----(1) resource request------>|              |
@@ -76,7 +76,7 @@ The scenario assumes that, before the sequence described below takes place, the 
  |          |                                |              |
  |          |<---(6) protected resource -----|              |
  |          |                                +--------------+
- |  Client  | 
+ |  Client  |
  |          |
  |          |                                +---------------+
  |          |                                |               |
@@ -93,12 +93,12 @@ Figure: Abstract protocol flow {#abstract-flow}
 
 1. The client requests a protected resource, presenting an access token.
 2. The resource server determines that the circumstances in which the presented access token was obtained offer insufficient authentication strength and/or freshness, hence it denies the request and returns a challenge describing (using a combination of `acr_values` and `max_age`) what authentication requirements must be met for the resource server to authorize a request.
-3. The client directs the user agent to the authorization server with an authorization request that includes the `acr_values` and/or `max_age` indicated by the resource server in the previous step. 
-4. After whatever sequence required by the grant of choice plays out, which will include the necessary steps to authenticate the user in accordance with the `acr_values` and/or `max_age` values of the authorization request, the authorization server returns a new access token to the client. The access token contains or references information about the authentication event. 
+3. The client directs the user agent to the authorization server with an authorization request that includes the `acr_values` and/or `max_age` indicated by the resource server in the previous step.
+4. After whatever sequence required by the grant of choice plays out, which will include the necessary steps to authenticate the user in accordance with the `acr_values` and/or `max_age` values of the authorization request, the authorization server returns a new access token to the client. The access token contains or references information about the authentication event.
 5. The client repeats the request from step 1, presenting the newly obtained access token.
 6. The resource server finds that the user authentication performed during the acquisition of the new access token complies with its requirements, and returns the requested protected resource.
 
-The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication level by which the access token was obtained. This document will describe how the resource server can perform that determination when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662]. 
+The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication level by which the access token was obtained. This document will describe how the resource server can perform that determination when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662].
 Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification.
 
 Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not be necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This isn't a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document doesn't recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario.
@@ -125,7 +125,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 (#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
 !---
-~~~ 
+~~~
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer error="insufficient_user_authentication",
   error_description="A different authentication level is required",
@@ -157,7 +157,7 @@ Both `acr_values` and `max_age` authorization request parameters are OPTIONAL pa
 
 The example request below, which might occur after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
-~~~ 
+~~~
 GET https://as.example.net/authorize?client_id=s6BhdRkqt3
 &response_type=code&scope=purchase&acr_values=myACR
 ~~~
@@ -182,19 +182,19 @@ Although [@OIDC] leaves the authorization server free to decide how to handle th
 # Authentication Information Conveyed via Access Token {#authn-info-in-at}
 
 To evaluate whether an access token meets the protected resource's requirements, the resource servers needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
-Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document. 
+Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document.
 
 ## JWT Access Tokens
 
 When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. It is useful to bear in mind that the values of those two parameters are established at user authentication time and won't change in the event of access token renewals. See the aforementioned Section 2.2.1 of [@!RFC9068] for details. The following is a conceptual example showing the decoded content of such a JWT access token.
 
 !---
-~~~ 
+~~~
 Header:
 
 {"typ":"at+JWT","alg":"RS256","kid":"LTacESbw"}
- 
-Claims: 
+
+Claims:
 
 {
  "iss": "https://as.example.net",
@@ -222,10 +222,10 @@ The following two top-level introspection response members are defined to convey
 `auth_time`
 :   Time when the user authentication occurred. A JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the time of date/time of the authentication event.
 
-The following example shows an introspection response with information about the user authentication event by which the access token was obtained. 
+The following example shows an introspection response with information about the user authentication event by which the access token was obtained.
 
 !---
-~~~ 
+~~~
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -250,7 +250,7 @@ Authorization Servers can advertise their support of this specification by inclu
 
 # Deployment Considerations {#Deployment}
 
-This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it's important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to any undesirable user experience outcomes. 
+This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it's important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to any undesirable user experience outcomes.
 The authentication prompts presented by the authorization server as a result of the requirements propagation method described here might require the user to perform some specific actions such as using multiple devices, having access to devices complying with specific security requirements, and so on. Those extra requirements, concerning more about how to comply with a particular requirement rather than indicating the identifier of the requirement itself, are out of scope for this specification.
 
 # Security Considerations {#Security}
@@ -356,7 +356,7 @@ Authentication Time:
 {backmatter}
 
 # Acknowledgements {#Acknowledgements}
-      
+
 I wanted to thank the Academy, the viewers at home, the shampoo manufacturers, etc..
 
 This specification was developed within the OAuth Working Group under
@@ -396,7 +396,7 @@ collaboration and community input.
 
 -01
 
-* Added AS Metadata section with pointer to `acr_values_supported` 
+* Added AS Metadata section with pointer to `acr_values_supported`
 * Mention that it's not necessarily the case that a new 'stepped-up' token always supersedes older tokens
 * Add examples with `max_age`
 
