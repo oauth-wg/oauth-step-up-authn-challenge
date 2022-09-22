@@ -192,7 +192,7 @@ When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `aut
 ~~~
 Header:
 
-{"typ":"at+JWT","alg":"RS256","kid":"LTacESbw"}
+{"typ":"at+JWT","alg":"ES256","kid":"LTacESbw"}
 
 Claims:
 
