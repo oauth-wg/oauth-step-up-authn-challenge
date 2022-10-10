@@ -102,6 +102,7 @@ The validation operations mentioned in step 2 and 6 imply that the resource serv
 Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification.
 
 Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not be necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This isn't a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document doesn't recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario.
+Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaque by clients. So, during the course of any token caching strategy, a client cannot inspect the content of the access token to determine the associated authentication information or other details. The token format might be unreadable to the client or might change at any time to become unreadable.
 
 # Authentication Requirements Challenge {#Challenge}
 
@@ -364,6 +365,7 @@ the chairpersonship of Rifaat Shekh-Yusef and Hannes Tschofenig with
 Paul Wouters, and Roman Danyliw serving as Security
 Area Directors. Additionally, the following individuals contributed
 ideas, feedback, corrections, and wording that helped shape this specification:
+Caleb Baker,
 Ivan Kanakarakis,
 Pieter Kasselman,
 Aaron Parecki,
@@ -382,7 +384,7 @@ collaboration and community input.
 
 -04
 
-* Editorial updates from WGLC feedback
+* Editorial updates/notes from WGLC feedback
 
 -03
 
