@@ -40,7 +40,7 @@ This document also codifies a mechanism for a client to request that an authoriz
 
 # Introduction {#Introduction}
 
-In simple API authorization scenarios, an authorization server will statically determine what authentication technique to use to handle a given request on the basis of aspects such as the scopes requested, the resource, the identity of the client and other characteristics known at provisioning time.
+In simple API authorization scenarios, an authorization server will determine what authentication technique to use to handle a given request on the basis of aspects such as the scopes requested, the resource, the identity of the client and other characteristics known at provisioning time.
 Although the approach is viable in many situations, it falls short in several important circumstances. Consider, for instance, an eCommerce API requiring different authentication strengths depending on whether the item being purchased exceeds a certain threshold, dynamically estimated by the API itself using a logic that is opaque to the authorization server.
 An API might also determine that  a more recent user authentication is required based on its own risk evaluation of the API request.
 
@@ -381,6 +381,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -04
+
+* Editorial updates from WGLC feedback
 
 -03
 
