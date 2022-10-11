@@ -369,6 +369,7 @@ Caleb Baker,
 Ivan Kanakarakis,
 Pieter Kasselman,
 Aaron Parecki,
+Dima Postnikov,
 and
 Filip Skokan.
 
@@ -383,6 +384,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -05
+
+* Forgotten Acknowledgements
 
 -04
 
