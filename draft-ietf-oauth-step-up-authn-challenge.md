@@ -154,7 +154,7 @@ If the resource server determines that the request is also lacking the scopes re
 # Authorization Request
 
 A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the corresponding requirements.
-Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See Section (#AuthzResp) for more details.
+Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See (#AuthzResp) for more details.
 
 The example request below, which might occur after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
