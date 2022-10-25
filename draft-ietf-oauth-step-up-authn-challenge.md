@@ -65,28 +65,31 @@ The scenario assumes that, before the sequence described below takes place, the 
 
 !---
 ~~~
- +----------+                                +--------------+
- |          |                                |              |
- |          |-----(1) resource request------>|              |
- |          |                                |              |
- |          |<-------(2) challenge ----------|   Resource   |
- |          |                                |    Server    |
- |          |                                |              |
- |          |-----(5) resource request ----->|              |
- |          |                                |              |
- |          |<---(6) protected resource -----|              |
- |          |                                +--------------+
- |  Client  |
- |          |
- |          |                                +---------------+
- |          |                                |               |
- |          |---(3) authorization request--->|               |
- |          |                                |               |
- |          |<-------------...-------------->| Authorization |
- |          |                                |     Server    |
- |          |<------ (4) access token -------|               |
- |          |                                |               |
- +----------+                                +---------------+
++----------+                                          +--------------+
+|          |                                          |              |
+|          |-------(1) resource request-------------->|              |
+|          |                                          |              |
+|          |<---------(2) challenge ------------------|   Resource   |
+|          |                                          |    Server    |
+|  Client  |                                          |              |
+|          |-------(5) resource request ------------->|              |
+|          |                                          |              |
+|          |<-----(6) protected resource -------------|              |
+|          |                                          +--------------+
+|          |
+|          |
+|          |  +-------+                              +---------------+
+|          |->|       |                              |               |
+|          |  |       |--(3) authorization request-->|               |
+|          |  | User  |                              |               |
+|          |  | Agent |<-----------[...]------------>| Authorization |
+|          |  |       |                              |     Server    |
+|          |<-|       |                              |               |
+|          |  +-------+                              |               |
+|          |                                         |               |
+|          |<-------- (4) access token --------------|               |
+|          |                                         |               |
++----------+                                         +---------------+
 ~~~
 !---
 Figure: Abstract protocol flow {#abstract-flow}
