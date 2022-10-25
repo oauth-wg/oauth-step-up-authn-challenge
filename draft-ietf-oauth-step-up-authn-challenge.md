@@ -153,23 +153,23 @@ If the resource server determines that the request is also lacking the scopes re
 
 # Authorization Request
 
-A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in a request to the authorization server to obtain a new access token complying with the corresponding requirements.
+A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` MAY parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in constructing an authorization request, which is then conveyed to the authorization server via the user agent in order to obtain a new access token complying with the corresponding requirements.
 Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See (#AuthzResp) for more details.
 
-The example request below, which might occur after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
+The example authorization request URI below, which might be used after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
 ~~~
-GET https://as.example.net/authorize?client_id=s6BhdRkqt3
+https://as.example.net/authorize?client_id=s6BhdRkqt3
 &response_type=code&scope=purchase&acr_values=myACR
 ~~~
 !---
 Figure: Authorization Request indicating `acr_values`
 
 
-Subsequent to the challenge in (#age-challenge), a client might make the following example request that indicates to the authorization server that the user authentication event needs to have occurred no more than five seconds prior.
+Subsequent to the challenge in (#age-challenge), a client might direct the user agent to the following example authorization request URI where the `max_age` parameter indicates to the authorization server that the user authentication event needs to have occurred no more than five seconds prior.
 !---
 ~~~
-GET https://as.example.net/authorize?client_id=s6BhdRkqt3
+https://as.example.net/authorize?client_id=s6BhdRkqt3
 &response_type=code&scope=purchase&max_age=5
 ~~~
 !---
@@ -385,6 +385,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -06
+
+* Update examples/figures to be clear that the authorization request is sent by the client via directing the user agent (not directly from client to AS)
 
 -05
 
