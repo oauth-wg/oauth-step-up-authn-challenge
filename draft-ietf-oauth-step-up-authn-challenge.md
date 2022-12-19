@@ -181,7 +181,7 @@ Figure: Authorization Request indicating `max_age`
 # Authorization Response {#AuthzResp}
 Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting ID Token. The same section also establishes that in case the desired authentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes the `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued ID Token.
 An authorization server complying with this specification will react to the presence of the `acr_values` and `max_age` parameters by including `acr` and `auth_time` in the access token (see (#authn-info-in-at) for details).
-Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in the ID Token when requested via `acr_values`, when it comes to access tokens in this specification it is RECOMMENDED that the requested `acr` value is treated as required for successfully fulfilling the request. That is, the requested `acr` value is included in the access token if the authentication operation successfully met its requirements, or that the authorization request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help prevent clients getting stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
+Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in the ID Token when requested via `acr_values`, when it comes to access tokens in this specification, the authorization server SHOULD consider the requested acr value as necessary for successfully fulfilling the request. That is, the requested `acr` value is included in the access token if the authentication operation successfully met its requirements, or that the authorization request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help prevent clients getting stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
 
 # Authentication Information Conveyed via Access Token {#authn-info-in-at}
 
@@ -386,6 +386,10 @@ collaboration and community input.
 # Document History
 
    [[ To be removed from the final specification ]]
+
+-07/-08
+
+* Editorial updates addressing Shepherd Review comments
 
 -06
 
