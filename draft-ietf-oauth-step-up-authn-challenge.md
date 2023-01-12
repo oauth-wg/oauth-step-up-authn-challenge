@@ -33,8 +33,8 @@ organization="Ping Identity"
 
 .# Abstract
 
-It is not uncommon for resource servers to require different authentication strengths or freshness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request doesn't meet its authentication requirements and specify how to meet them.
-This document also codifies a mechanism for a client to request that an authorization server achieve a specific authentication strength or freshness when processing an authorization request.
+It is not uncommon for resource servers to require different authentication strengths or recentness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request doesn't meet its authentication requirements and specify how to meet them.
+This document also codifies a mechanism for a client to request that an authorization server achieve a specific authentication strength or recentness when processing an authorization request.
 
 {mainmatter}
 
@@ -60,7 +60,7 @@ when, and only when, they appear in all capitals, as shown here.
 
 # Protocol Overview
 
-Following is an end-to-end sequence of a typical step-up authentication scenario implemented according to this specification.
+The following is an end-to-end sequence of a typical step-up authentication scenario implemented according to this specification.
 The scenario assumes that, before the sequence described below takes place, the client already obtained an access token for the protected resource.
 
 !---
@@ -95,7 +95,7 @@ The scenario assumes that, before the sequence described below takes place, the 
 Figure: Abstract protocol flow {#abstract-flow}
 
 1. The client requests a protected resource, presenting an access token.
-2. The resource server determines that the circumstances in which the presented access token was obtained offer insufficient authentication strength and/or freshness, hence it denies the request and returns a challenge describing (using a combination of `acr_values` and `max_age`) what authentication requirements must be met for the resource server to authorize a request.
+2. The resource server determines that the circumstances in which the presented access token was obtained offer insufficient authentication strength and/or recentness, hence it denies the request and returns a challenge describing (using a combination of `acr_values` and `max_age`) what authentication requirements must be met for the resource server to authorize a request.
 3. The client directs the user agent to the authorization server with an authorization request that includes the `acr_values` and/or `max_age` indicated by the resource server in the previous step.
 4. After whatever sequence required by the grant of choice plays out, which will include the necessary steps to authenticate the user in accordance with the `acr_values` and/or `max_age` values of the authorization request, the authorization server returns a new access token to the client. The access token contains or references information about the authentication event.
 5. The client repeats the request from step 1, presenting the newly obtained access token.
@@ -120,11 +120,11 @@ Note: the logic through which the resource server determines that the current re
 Furthermore, this specification defines additional `WWW-Authenticate` auth-param values to convey the authentication requirements back to the client.
 
 `acr_values`
-:   A space-separated string listing the authentication context class reference values, in order of preference, one of which the protected resource requires for the authentication event associated with the access token.
+:   A space-separated string listing the authentication context class reference values, in order of preference, one of which the protected resource requires for the authentication event associated with the access token. The authentication context, as defined in section 1.2 of [@OIDC] conveys information about how authentication takes place (e.g., what authentication method(s) or assurance level to meet).
 
 
 `max_age`
-:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token.
+:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt.
 
 (#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
@@ -157,7 +157,7 @@ If the resource server determines that the request is also lacking the scopes re
 # Authorization Request
 
 A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` SHOULD parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in constructing an authorization request, which is then conveyed to the authorization server via the user agent in order to obtain a new access token complying with the corresponding requirements.
-Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for precessing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See (#AuthzResp) for more details.
+Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for processing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See (#AuthzResp) for more details.
 
 The example authorization request URI below, which might be used after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
 !---
@@ -179,7 +179,7 @@ https://as.example.net/authorize?client_id=s6BhdRkqt3
 Figure: Authorization Request indicating `max_age`
 
 # Authorization Response {#AuthzResp}
-Section 5.5.1.1 of [@OIDC] establishes that an authorization server receiving a request containing the `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting ID Token. The same section also establishes that in case the desired authentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). The same section also states that if a request includes the `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued ID Token.
+[@OIDC, section 5.5.1.1] establishes that an authorization server receiving a request containing the `acr_values` parameter MAY attempt to authenticate the user in a manner that satisfies the requested Authentication Context Class Reference, and include the corresponding value in the `acr` claim in the resulting ID Token. The same section also establishes that in case the desired authentication level cannot be met, the authorization server SHOULD include in the `acr` claim a value reflecting the authentication level of the current session (if any). Furthermore, [@OIDC, section 3.1.2.1] states that if a request includes the `max_age` parameter, the authorization server MUST include the `auth_time` claim in the issued ID Token.
 An authorization server complying with this specification will react to the presence of the `acr_values` and `max_age` parameters by including `acr` and `auth_time` in the access token (see (#authn-info-in-at) for details).
 Although [@OIDC] leaves the authorization server free to decide how to handle the inclusion of `acr` in the ID Token when requested via `acr_values`, when it comes to access tokens in this specification, the authorization server SHOULD consider the requested acr value as necessary for successfully fulfilling the request. That is, the requested `acr` value is included in the access token if the authentication operation successfully met its requirements, or that the authorization request fails in all other cases, returning `unmet_authentication_requirements` as defined in [@OIDCUAR]. The recommended behavior will help prevent clients getting stuck in a loop where the authorization server keeps returning tokens that the resource server already identified as not meeting its requirements hence known to be rejected as well.
 
@@ -259,9 +259,13 @@ The authentication prompts presented by the authorization server as a result of 
 
 # Security Considerations {#Security}
 
-This document should, in no circumstance, be used to position OAuth as an authentication protocol. The specification focuses on the authentication event of the user with the authorization server by which the access token was obtained, so that its characteristics can be evaluated by a resource server to determine whether they meet its requirements, but relies on a separate authentication layer to take care of the mechanics leading to that event. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (e.g., OpenID Connect), and so forth.
-Depending on the policies adopted by the resource server, the `acr_values` parameter introduced in (#Challenge) might unintentionally disclose information about the authenticated user, the resource itself, the authorization server, and any other context-specific data that an attacker might use to gain knowledge about their target. Implementers should use care in determining what to disclose in the challenge and in what circumstances.
-The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server is free to choose whatever method fits best for its needs, however, it's important to remember that returning a challenge without having verified that the caller presented a valid token (according to the validation method of choice) might mean disclosing information to an actor that didn't prove it had the ability to obtain a valid token for the resource server, albeit of insufficient level.
+This specification adds to previously defined OAuth mechanisms.  Their respective Security Considerations apply - OAuth 2.0 [@RFC6749], JWT access tokens [@RFC9068], Bearer WWW-Authentication [@RFC6750], token introspection [@RFC7662], and authorization server metadata [@RFC8414].
+
+For the purposes of this specification, the way in which a user authenticated with the authorization server to obtain an access token is salient information, as a resource server might decide whether to grant access on the basis of how that authentication operation was performed. Nonetheless, this specification doesn't attempt to define the mechanics by which authentication takes place, relying on a separate authentication layer to take care of the details. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (e.g., OpenID Connect), and so forth.
+Depending on the policies adopted by the resource server, the `acr_values` parameter introduced in (#Challenge) might unintentionally disclose information about the authenticated user, the resource itself, the authorization server, and any other context-specific data that an attacker might use to gain knowledge about their target.
+For example, a resource server requesting an acr value corresponding to a high level of assurance for some users but not others might identify possible high privilege users to target with spearhead phishing attacks.
+Implementers should use care in determining what to disclose in the challenge and in what circumstances.
+The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server MAY return a challenge without verifying the client presented a valid token. However, this approach will leak the required properties of an authorization token to an actor who has not proven they can obtain a token for this resource server.
 
 # IANA Considerations {#IANA}
 
@@ -386,6 +390,10 @@ collaboration and community input.
 # Document History
 
    [[ To be removed from the final specification ]]
+
+-09
+
+* Updates addressing AD review comments
 
 -07/-08
 
