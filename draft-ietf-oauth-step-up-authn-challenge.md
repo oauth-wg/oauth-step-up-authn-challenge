@@ -393,6 +393,8 @@ collaboration and community input.
 
    [[ To be removed from the final specification ]]
 
+-12
+
 -11
 
 - Updates in the Protocol Overview section clarifying the nature of "authentication levels" and caching strategies, addressing AD review comments
