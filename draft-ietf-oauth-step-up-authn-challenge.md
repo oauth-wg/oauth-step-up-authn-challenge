@@ -126,7 +126,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 
 
 `max_age`
-:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt.
+:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt. Note that while the auth-param value can be a token or quoted-string (see section 3.1 of [@RFC9110]) its
 
 (#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
@@ -261,7 +261,7 @@ The authentication prompts presented by the authorization server as a result of 
 
 # Security Considerations {#Security}
 
-This specification adds to previously defined OAuth mechanisms.  Their respective Security Considerations apply - OAuth 2.0 [@RFC6749], JWT access tokens [@RFC9068], Bearer WWW-Authentication [@RFC6750], token introspection [@RFC7662], and authorization server metadata [@RFC8414].
+This specification adds to previously defined OAuth mechanisms.  Their respective Security Considerations apply - OAuth 2.0 [@RFC6749], JWT access tokens [@RFC9068], Bearer WWW-Authentication [@!RFC6750], token introspection [@RFC7662], and authorization server metadata [@RFC8414].
 
 This document MUST NOT be used to position OAuth as an authentication protocol. For the purposes of this specification, the way in which a user authenticated with the authorization server to obtain an access token is salient information, as a resource server might decide whether to grant access on the basis of how that authentication operation was performed. Nonetheless, this specification does not attempt to define the mechanics by which authentication takes place, relying on a separate authentication layer to take care of the details. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (e.g., OpenID Connect), and so forth.
 Depending on the policies adopted by the resource server, the `acr_values` parameter introduced in (#Challenge) might unintentionally disclose information about the authenticated user, the resource itself, the authorization server, and any other context-specific data that an attacker might use to gain knowledge about their target.
