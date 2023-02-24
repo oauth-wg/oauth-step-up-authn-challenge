@@ -33,7 +33,7 @@ organization="Ping Identity"
 
 .# Abstract
 
-It is not uncommon for resource servers to require different authentication strengths or recentness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request doesn't meet its authentication requirements and specify how to meet them.
+It is not uncommon for resource servers to require different authentication strengths or recentness according to the characteristics of a request. This document introduces a mechanism for a resource server to signal to a client that the authentication event associated with the access token of the current request does not meet its authentication requirements and specify how to meet them.
 This document also codifies a mechanism for a client to request that an authorization server achieve a specific authentication strength or recentness when processing an authorization request.
 
 {mainmatter}
@@ -44,7 +44,7 @@ In simple API authorization scenarios, an authorization server will determine wh
 Although the approach is viable in many situations, it falls short in several important circumstances. Consider, for instance, an eCommerce API requiring different authentication strengths depending on whether the item being purchased exceeds a certain threshold, dynamically estimated by the API itself using a logic that is opaque to the authorization server.
 An API might also determine that  a more recent user authentication is required based on its own risk evaluation of the API request.
 
-This document extends the error codes collection defined by [@!RFC6750] with a new value, `insufficient_user_authentication`, which can be used by resource servers to signal to the client that the authentication event associated with the access token presented with the request doesn't meet the authentication requirements of the resource server.
+This document extends the error codes collection defined by [@!RFC6750] with a new value, `insufficient_user_authentication`, which can be used by resource servers to signal to the client that the authentication event associated with the access token presented with the request does not meet the authentication requirements of the resource server.
 This document also introduces `acr_values` and `max_age` parameters for the `WWW-Authenticate` response header defined by [@!RFC6750], which the resource server can use to explicitly communicate to the client the required authentication strength or recentness.
 
 The client can use that information to reach back to the authorization server with an authorization request specifying the authentication requirements indicated by protected resource, by including the `acr_values` or `max_age` parameter as defined in [@OIDC].
@@ -106,7 +106,7 @@ Other methods of determining the authentication level by which the access token 
 
 It is worthwhile to remark that the notion of "authentication level", as used in this document, represents an assessment the resource server performs on specific authentication methods, to arbitrarily determine whether it meets its own security criteria for the requested resource. "Authentication level" in this specification does not imply, requires nor refers to an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of level emerges from the fact that the resource server will accept some methods and reject others, hence establishing a way of comparing methods that meets the intuitive notion of "step up" .
 
-Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This isn't a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document doesn't recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
+Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
 Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaque by clients. The token format might be unreadable to the client or might change at any time to become unreadable. So, during the course of any token caching strategy, a client must not attempt to inspect the content of the access token to determine the associated authentication information or other details (see Section 6 of [@!RFC9068] for a more detailed discussion).
 
 # Authentication Requirements Challenge {#Challenge}
@@ -115,9 +115,9 @@ Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaq
 This specification introduces a new error code value for the `error` parameter of [@!RFC6750] or authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the `error` parameter:
 
 `insufficient_user_authentication`
-:   The authentication event associated with the access token presented with the request doesn't meet the authentication requirements of the protected resource.
+:   The authentication event associated with the access token presented with the request does not meet the authentication requirements of the protected resource.
 
-Note: the logic through which the resource server determines that the current request doesn't meet the authentication requirements of the protected resource, and associated functionality (such as expressing, deploying and publishing such requirements) is out of scope for this document.
+Note: the logic through which the resource server determines that the current request does not meet the authentication requirements of the protected resource, and associated functionality (such as expressing, deploying and publishing such requirements) is out of scope for this document.
 
 Furthermore, this specification defines additional `WWW-Authenticate` auth-param values to convey the authentication requirements back to the client.
 
@@ -128,7 +128,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 `max_age`
 :   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt.
 
-(#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented isn't sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
+(#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
 !---
 ~~~
@@ -192,7 +192,7 @@ Authorization servers and resource servers MAY elect to use other encoding and v
 
 ## JWT Access Tokens
 
-When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. It is useful to bear in mind that the values of those two parameters are established at user authentication time and won't change in the event of access token renewals. See the aforementioned Section 2.2.1 of [@!RFC9068] for details. The following is a conceptual example showing the decoded content of such a JWT access token.
+When access tokens are represented as JSON Web Tokens (JWT) [@RFC7519], the `auth_time` and `acr` claims (per Section 2.2.1 of [@!RFC9068]) are used to convey the time and context of the user authentication event that the authentication server performed during the course of obtaining the access token. It is useful to bear in mind that the values of those two parameters are established at user authentication time and will not change in the event of access token renewals. See the aforementioned Section 2.2.1 of [@!RFC9068] for details. The following is a conceptual example showing the decoded content of such a JWT access token.
 
 !---
 ~~~
@@ -256,14 +256,14 @@ Authorization Servers can advertise their support of this specification by inclu
 
 # Deployment Considerations {#Deployment}
 
-This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it's important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to an undesirable user experience outcome.
+This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it is important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to an undesirable user experience outcome.
 The authentication prompts presented by the authorization server as a result of the requirements propagation method described here might require the user to perform some specific actions such as using multiple devices, having access to devices complying with specific security requirements, and so on. Those extra requirements, concerning more about how to comply with a particular requirement rather than indicating the identifier of the requirement itself, are out of scope for this specification.
 
 # Security Considerations {#Security}
 
 This specification adds to previously defined OAuth mechanisms.  Their respective Security Considerations apply - OAuth 2.0 [@RFC6749], JWT access tokens [@RFC9068], Bearer WWW-Authentication [@RFC6750], token introspection [@RFC7662], and authorization server metadata [@RFC8414].
 
-This document MUST NOT be used to position OAuth as an authentication protocol. For the purposes of this specification, the way in which a user authenticated with the authorization server to obtain an access token is salient information, as a resource server might decide whether to grant access on the basis of how that authentication operation was performed. Nonetheless, this specification doesn't attempt to define the mechanics by which authentication takes place, relying on a separate authentication layer to take care of the details. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (e.g., OpenID Connect), and so forth.
+This document MUST NOT be used to position OAuth as an authentication protocol. For the purposes of this specification, the way in which a user authenticated with the authorization server to obtain an access token is salient information, as a resource server might decide whether to grant access on the basis of how that authentication operation was performed. Nonetheless, this specification does not attempt to define the mechanics by which authentication takes place, relying on a separate authentication layer to take care of the details. In line with other specifications of the OAuth family, this document assumes the existence of a session without going into the details of how it is established or maintained, what protocols are used to implement that layer (e.g., OpenID Connect), and so forth.
 Depending on the policies adopted by the resource server, the `acr_values` parameter introduced in (#Challenge) might unintentionally disclose information about the authenticated user, the resource itself, the authorization server, and any other context-specific data that an attacker might use to gain knowledge about their target.
 For example, a resource server requesting an acr value corresponding to a high level of assurance for some users but not others might identify possible high privilege users to target with spearhead phishing attacks.
 Implementers should use care in determining what to disclose in the challenge and in what circumstances.
@@ -385,7 +385,7 @@ Filip Skokan.
 
 Some early discussion of the motivations and concepts that precipitated the initial version
 of this document occurred at the 2021 OAuth Security Workshop. The authors thank the organizers of the
-workshop (Guido Schmitz, Steinar Noem, and Daniel Fett) for hosting an event that's conducive to
+workshop (Guido Schmitz, Steinar Noem, and Daniel Fett) for hosting an event that is conducive to
 collaboration and community input.
 
 
@@ -394,6 +394,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -12
+
+* Updates from Genart Last Call review
 
 -11
 
