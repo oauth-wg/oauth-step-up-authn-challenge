@@ -126,7 +126,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 
 
 `max_age`
-:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt. Note that while the auth-param value can be a token or quoted-string (see section 3.1 of [@RFC9110]) its
+:   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt.
 
 (#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
