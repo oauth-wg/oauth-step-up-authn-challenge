@@ -393,6 +393,10 @@ collaboration and community input.
 
    [[ To be removed from the final specification ]]
 
+-13
+
+* Make IETF the Change Controller for all registration requests per IANA suggestion
+
 -12
 
 * Updates from Genart Last Call review
