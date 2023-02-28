@@ -130,6 +130,8 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 
 (#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
+Note that while this specification only defines usage of the above auth-params with the `insufficient_user_authentication` error code, it does not preclude future specifications or profiles from defining their usage with other error codes.
+
 !---
 ~~~
 HTTP/1.1 401 Unauthorized
@@ -396,6 +398,7 @@ collaboration and community input.
 -13
 
 * Make IETF the Change Controller for all registration requests per IANA suggestion
+* More updates from Genart review
 
 -12
 
