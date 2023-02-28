@@ -290,14 +290,14 @@ Authentication Context Class Reference:
 
 * Name: `acr`
 * Description: Authentication Context Class Reference
-* Change Controller: IESG
+* Change Controller: IETF
 * Specification Document(s): (#introspect) of [[ this specification ]]
 
 Authentication Time:
 
 * Name: `auth_time`
 * Description: Time when the user authentication occurred
-* Change Controller: IESG
+* Change Controller: IETF
 * Specification Document(s): (#introspect) of [[ this specification ]]
 
 
