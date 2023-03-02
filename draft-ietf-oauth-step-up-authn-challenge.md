@@ -399,6 +399,7 @@ collaboration and community input.
 
 * Make IETF the Change Controller for all registration requests per IANA suggestion
 * More updates from Genart review
+* Updates from Artart review
 
 -12
 
@@ -462,4 +463,4 @@ collaboration and community input.
 
 -00 draft-bertocci-oauth-step-up-authn-challenge
 
-* Initial Individual Draft (with all the authority thereby bestowed [@I-D.abr-twitter-reply]).
+* Initial Individual Draft (with all the authority thereby bestowed https://datatracker.ietf.org/doc/html/draft-abr-twitter-reply).
