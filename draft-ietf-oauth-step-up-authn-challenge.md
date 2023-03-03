@@ -271,6 +271,8 @@ For example, a resource server requesting an acr value corresponding to a high l
 Implementers should use care in determining what to disclose in the challenge and in what circumstances.
 The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server MAY return a challenge without verifying the client presented a valid token. However, this approach will leak the required properties of an authorization token to an actor who has not proven they can obtain a token for this resource server.
 
+As this specification provides a mechanism for the resource server to trigger user interaction, it's important for the authorization server and clients to consider that a malicious resource server might abuse of that feature.
+
 # IANA Considerations {#IANA}
 
 ##  OAuth Extensions Error Registration
@@ -400,6 +402,7 @@ collaboration and community input.
 * Make IETF the Change Controller for all registration requests per IANA suggestion
 * More updates from Genart review
 * Updates from Artart review
+* Updates from Secdir review
 
 -12
 
