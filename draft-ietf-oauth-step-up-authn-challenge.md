@@ -45,18 +45,20 @@ Although the approach is viable in many situations, it falls short in several im
 An API might also determine that  a more recent user authentication is required based on its own risk evaluation of the API request.
 
 This document extends the error codes collection defined by [@!RFC6750] with a new value, `insufficient_user_authentication`, which can be used by resource servers to signal to the client that the authentication event associated with the access token presented with the request does not meet the authentication requirements of the resource server.
-This document also introduces `acr_values` and `max_age` parameters for the `WWW-Authenticate` response header defined by [@!RFC6750], which the resource server can use to explicitly communicate to the client the required authentication strength or recentness.
+This document also introduces `acr_values` and `max_age` parameters for the `Bearer` authentication scheme challenge defined by [@!RFC6750], which the resource server can use to explicitly communicate to the client the required authentication strength or recentness.
 
-The client can use that information to reach back to the authorization server with an authorization request specifying the authentication requirements indicated by protected resource, by including the `acr_values` or `max_age` parameter as defined in [@OIDC].
+The client can use that information to reach back to the authorization server with an authorization request specifying the authentication requirements indicated by protected resource, by including the `acr_values` or `max_age` authorization request parameters as defined in [@OIDC].
 
 Those extensions will make it possible to implement interoperable step up authentication with minimal work from resource servers, clients and authorization servers.
 
-## Conventions and Definitions
+## Conventions and Terminology
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
 document are to be interpreted as described in BCP 14 [@!RFC2119] [@!RFC8174]
 when, and only when, they appear in all capitals, as shown here.
+
+This specification uses the terms "access token", "authorization server", "authorization endpoint", "authorization request", "client", "protected resource", and "resource server" defined by The OAuth 2.0 Authorization Framework [@!RFC6749].
 
 # Protocol Overview
 
@@ -67,12 +69,12 @@ The scenario assumes that, before the sequence described below takes place, the 
 ~~~
 +----------+                                          +--------------+
 |          |                                          |              |
-|          |-------(1) resource request-------------->|              |
+|          |-----------(1) request ------------------>|              |
 |          |                                          |              |
 |          |<---------(2) challenge ------------------|   Resource   |
 |          |                                          |    Server    |
 |  Client  |                                          |              |
-|          |-------(5) resource request ------------->|              |
+|          |-----------(5) request ------------------>|              |
 |          |                                          |              |
 |          |<-----(6) protected resource -------------|              |
 |          |                                          +--------------+
@@ -99,7 +101,7 @@ Figure: Abstract protocol flow {#abstract-flow}
 3. The client directs the user agent to the authorization server with an authorization request that includes the `acr_values` and/or `max_age` indicated by the resource server in the previous step.
 4. After whatever sequence required by the grant of choice plays out, which will include the necessary steps to authenticate the user in accordance with the `acr_values` and/or `max_age` values of the authorization request, the authorization server returns a new access token to the client. The access token contains or references information about the authentication event.
 5. The client repeats the request from step 1, presenting the newly obtained access token.
-6. The resource server finds that the user authentication performed during the acquisition of the new access token complies with its requirements, and returns the requested protected resource.
+6. The resource server finds that the user authentication performed during the acquisition of the new access token complies with its requirements, and returns the representation of the requested protected resource.
 
 The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication level by which the access token was obtained. This document will describe how the resource server can perform that determination when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662].
 Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification.
@@ -112,14 +114,14 @@ Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaq
 # Authentication Requirements Challenge {#Challenge}
 
 
-This specification introduces a new error code value for the `error` parameter of [@!RFC6750] or authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the `error` parameter:
+This specification introduces a new error code value for the `error` parameter of the challenge of the `Bearer` authentication scheme from [@!RFC6750] and other OAuth authentication schemes, such as [@I-D.ietf-oauth-dpop], which use the same `error` parameter:
 
 `insufficient_user_authentication`
 :   The authentication event associated with the access token presented with the request does not meet the authentication requirements of the protected resource.
 
 Note: the logic through which the resource server determines that the current request does not meet the authentication requirements of the protected resource, and associated functionality (such as expressing, deploying and publishing such requirements) is out of scope for this document.
 
-Furthermore, this specification defines additional `WWW-Authenticate` auth-param values to convey the authentication requirements back to the client.
+Furthermore, this specification defines the following `WWW-Authenticate` auth-param values for those OAuth authentication schemes to convey the authentication requirements back to the client.
 
 `acr_values`
 :   A space-separated string listing the authentication context class reference values, in order of preference, one of which the protected resource requires for the authentication event associated with the access token. The authentication context, as defined in section 1.2 of [@OIDC] conveys information about how authentication takes place (e.g., what authentication method(s) or assurance level to meet).
@@ -128,7 +130,7 @@ Furthermore, this specification defines additional `WWW-Authenticate` auth-param
 `max_age`
 :   Indicates the allowable elapsed time in seconds since the last active authentication event associated with the access token. An active authentication event entails a user interacting with the authorization server in response to an authentication prompt. Note that while the auth-param value can be conveyed as a token or quoted-string (see section 11.2 of [@RFC9110]), it has to represent a non-negative integer.
 
-(#acr-challenge) below is an example of a `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
+(#acr-challenge) below is an example of a `Bearer` authentication scheme challenge with the `WWW-Authenticate` header using the `insufficient_user_authentication` error code value to inform the client that the access token presented is not sufficient to gain access to the protected resource, and the `acr_values` parameter to let the client know that the expected authentication level corresponds to the authentication context class reference identified by `myACR`.
 
 Note that while this specification only defines usage of the above auth-params with the `insufficient_user_authentication` error code, it does not preclude future specifications or profiles from defining their usage with other error codes.
 
@@ -160,7 +162,7 @@ If the resource server determines that the request is also lacking the scopes re
 
 # Authorization Request
 
-A client receiving an authorization error from the resource server carrying the error code `insufficient_user_authentication` SHOULD parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in constructing an authorization request, which is then conveyed to the authorization server via the user agent in order to obtain a new access token complying with the corresponding requirements.
+A client receiving a challenge from the resource server carrying the error code `insufficient_user_authentication` SHOULD parse the `WWW-Authenticate` header for  `acr_values` and `max_age` and use them, if present, in constructing an authorization request, which is then conveyed to the authorization server's authorization endpoint via the user agent in order to obtain a new access token complying with the corresponding requirements.
 Both `acr_values` and `max_age` authorization request parameters are OPTIONAL parameters defined in Section 3.1.2.1. of [@OIDC]. This document does not introduce any changes in the authorization server behavior defined in [@OIDC] for processing those parameters, hence any authorization server implementing OpenID Connect will be able to participate in the flow described here with little or no changes. See (#AuthzResp) for more details.
 
 The example authorization request URI below, which might be used after receiving the challenge in (#acr-challenge), indicates to the authorization server that the client would like the authentication to occur according to the authentication context class reference identified by `myACR`.
@@ -398,6 +400,8 @@ collaboration and community input.
    [[ To be removed from the final specification ]]
 
 -14
+
+* Updates from Httpdir telechat review
 
 -13
 
