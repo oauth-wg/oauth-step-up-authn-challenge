@@ -108,7 +108,7 @@ Other methods of determining the authentication level by which the access token 
 
 It is worthwhile to remark that the notion of "authentication level", as used in this document, represents an assessment the resource server performs on specific authentication methods, to arbitrarily determine whether it meets its own security criteria for the requested resource. "Authentication level" in this specification does not imply, requires nor refers to an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of level emerges from the fact that the resource server will accept some methods and reject others, hence establishing a way of comparing methods that meets the intuitive notion of "step up" .
 
-Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one- selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
+Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one - selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
 Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaque by clients. The token format might be unreadable to the client or might change at any time to become unreadable. So, during the course of any token caching strategy, a client must not attempt to inspect the content of the access token to determine the associated authentication information or other details (see Section 6 of [@!RFC9068] for a more detailed discussion).
 
 # Authentication Requirements Challenge {#Challenge}
@@ -175,7 +175,7 @@ https://as.example.net/authorize?client_id=s6BhdRkqt3
 Figure: Authorization Request indicating `acr_values`
 
 
-Subsequent to the challenge in (#age-challenge), a client might direct the user agent to the following example authorization request URI where the `max_age` parameter indicates to the authorization server that the user authentication event needs to have occurred no more than five seconds prior.
+After the challenge in (#age-challenge), a client might direct the user agent to the following example authorization request URI where the `max_age` parameter indicates to the authorization server that the user authentication event needs to have occurred no more than five seconds prior.
 !---
 ~~~
 https://as.example.net/authorize?client_id=s6BhdRkqt3
@@ -191,7 +191,7 @@ Although [@OIDC] leaves the authorization server free to decide how to handle th
 
 # Authentication Information Conveyed via Access Token {#authn-info-in-at}
 
-To evaluate whether an access token meets the protected resource's requirements, the resource servers needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
+To evaluate whether an access token meets the protected resource's requirements, the resource server needs a way of accessing information about the authentication event by which that access token was obtained. This specification provides guidance on how to convey that information in conjunction with two common access token validation methods: the one described in [@!RFC9068], where the access token is encoded in JWT format and verified via a set of validation rules, and the one described in [@!RFC7662], where the token is validated and decoded by sending it to an introspection endpoint.
 Authorization servers and resource servers MAY elect to use other encoding and validation methods, however those are out of scope for this document.
 
 ## JWT Access Tokens
@@ -261,7 +261,7 @@ Authorization Servers can advertise their support of this specification by inclu
 # Deployment Considerations {#Deployment}
 
 This specification facilitates the communication of requirements from a resource server to a client, which in turn can enable a smooth step-up authentication experience. However, it is important to realize that the user experience achievable in every specific deployment is a function of the policies each resource server and authorization server pairs establish. Imposing constraints on those policies is out of scope for this specification, hence it is perfectly possible for resource servers and authorization servers to impose requirements that are impossible for users to comply with, or leading to an undesirable user experience outcome.
-The authentication prompts presented by the authorization server as a result of the requirements propagation method described here might require the user to perform some specific actions such as using multiple devices, having access to devices complying with specific security requirements, and so on. Those extra requirements, concerning more about how to comply with a particular requirement rather than indicating the identifier of the requirement itself, are out of scope for this specification.
+The authentication prompts presented by the authorization server as a result of the method of propagating authentication requirements described here might require the user to perform some specific actions such as using multiple devices, having access to devices complying with specific security requirements, and so on. Those extra requirements, concerning more about how to comply with a particular requirement rather than indicating the identifier of the requirement itself, are out of scope for this specification.
 
 # Security Considerations {#Security}
 
@@ -271,7 +271,7 @@ This document MUST NOT be used to position OAuth as an authentication protocol. 
 Depending on the policies adopted by the resource server, the `acr_values` parameter introduced in (#Challenge) might unintentionally disclose information about the authenticated user, the resource itself, the authorization server, and any other context-specific data that an attacker might use to gain knowledge about their target.
 For example, a resource server requesting an acr value corresponding to a high level of assurance for some users but not others might identify possible high privilege users to target with spearhead phishing attacks.
 Implementers should use care in determining what to disclose in the challenge and in what circumstances.
-The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the traditional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server MAY return a challenge without verifying the client presented a valid token. However, this approach will leak the required properties of an authorization token to an actor who has not proven they can obtain a token for this resource server.
+The logic examining the incoming access token to determine whether a challenge should be returned can execute either before or after the conventional token validation logic, be it based on JWT token validation, introspection, or any other method. The resource server MAY return a challenge without verifying the client presented a valid token. However, this approach will leak the required properties of an authorization token to an actor who has not proven they can obtain a token for this resource server.
 
 As this specification provides a mechanism for the resource server to trigger user interaction, it's important for the authorization server and clients to consider that a malicious resource server might abuse of that feature.
 
@@ -308,7 +308,7 @@ Authentication Time:
 
 
 
-<reference anchor="OIDC" target="http://openid.net/specs/openid-connect-core-1_0.html">
+<reference anchor="OIDC" target="https://openid.net/specs/openid-connect-core-1_0.html">
   <front>
     <title>OpenID Connect Core 1.0 incorporating errata set 1</title>
     <author initials="N." surname="Sakimura" fullname="Nat Sakimura">
