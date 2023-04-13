@@ -401,6 +401,8 @@ collaboration and community input.
 
 -15
 
+* Editorial updates from IESG review/ballot
+
 -14
 
 * Updates from Httpdir telechat review
