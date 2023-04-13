@@ -28,7 +28,6 @@ organization="Ping Identity"
     [author.address]
     email = "bcampbell@pingidentity.com"
 
-
 %%%
 
 .# Abstract
