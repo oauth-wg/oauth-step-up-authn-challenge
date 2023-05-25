@@ -1,0 +1,167 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-05-25T00:34:03.548770+00:00",
+  "repo": "oauth-wg/oauth-step-up-authn-challenge",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOG5c0CM47DzlX",
+      "title": "add examples showing max_age",
+      "url": "https://github.com/oauth-wg/oauth-step-up-authn-challenge/pull/1",
+      "state": "MERGED",
+      "author": "bc-pi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-07T21:21:13Z",
+      "updatedAt": "2022-07-07T21:42:12Z",
+      "baseRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "baseRefName": "main",
+      "baseRefOid": "99ace8ff8480b8bcc6bbf5e1e93cb1456c910176",
+      "headRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "headRefName": "max-age-examples-too",
+      "headRefOid": "ff0f678fea0570951452b0baa8f13b61fe3314f4",
+      "closedAt": "2022-07-07T21:42:05Z",
+      "mergedAt": "2022-07-07T21:42:05Z",
+      "mergedBy": "bc-pi",
+      "mergeCommit": {
+        "oid": "be68441751e079b1d8b1cb9e36cd7c1ff474c242"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOG5c0CM47f7Ma",
+      "title": "Fix typos introduced in -01 and begin to fill out the Acknowledgements",
+      "url": "https://github.com/oauth-wg/oauth-step-up-authn-challenge/pull/2",
+      "state": "MERGED",
+      "author": "bc-pi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-15T21:43:00Z",
+      "updatedAt": "2023-04-13T12:33:51Z",
+      "baseRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "baseRefName": "main",
+      "baseRefOid": "16479599523f9152d19cb0e79827a50eaeb10594",
+      "headRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "headRefName": "typos-and-acks",
+      "headRefOid": "a3970c1bb1205b5bcd6410bb59c991fd65593b79",
+      "closedAt": "2022-07-15T23:14:09Z",
+      "mergedAt": "2022-07-15T23:14:09Z",
+      "mergedBy": "bc-pi",
+      "mergeCommit": {
+        "oid": "fee7a1f44779d703a6ff85fb0bea409b7bdf16e1"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOG5c0CM5NtIZv",
+      "title": "changes/clarifications from Httpdir telechat review ",
+      "url": "https://github.com/oauth-wg/oauth-step-up-authn-challenge/pull/3",
+      "state": "MERGED",
+      "author": "bc-pi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "changes/clarifications from Httpdir telechat review https://mailarchi\u2026ve.ietf.org/arch/msg/oauth/HdxLGZA7Z6iaMbB6NrLOuXqzIlw/",
+      "createdAt": "2023-04-05T19:25:19Z",
+      "updatedAt": "2023-04-13T12:33:49Z",
+      "baseRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "baseRefName": "main",
+      "baseRefOid": "79dccd4cd603345869caa170db1277d1312933e8",
+      "headRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "headRefName": "httpdir-review",
+      "headRefOid": "36724659f96442758cd0d165e21ba918cbae1402",
+      "closedAt": "2023-04-05T23:47:58Z",
+      "mergedAt": "2023-04-05T23:47:58Z",
+      "mergedBy": "bc-pi",
+      "mergeCommit": {
+        "oid": "8658d55d3f7ae01ca67ed89b5516db5ca0e8e0ac"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOG5c0CM5OJNkF",
+      "title": "updates from Lars Eggert's IESG review/ballot",
+      "url": "https://github.com/oauth-wg/oauth-step-up-authn-challenge/pull/4",
+      "state": "MERGED",
+      "author": "bc-pi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "updates from Lars Eggert's IESG review/ballot https://mailarchive.ietf.org/arch/msg/oauth/E8AdXYdVv9b9eVjcz4k_oJcvL3I/",
+      "createdAt": "2023-04-12T15:04:50Z",
+      "updatedAt": "2023-04-12T18:54:20Z",
+      "baseRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "baseRefName": "main",
+      "baseRefOid": "a3a75d5a5adb1c7d6b8cd21333a594bbd8dd586e",
+      "headRepository": "oauth-wg/oauth-step-up-authn-challenge",
+      "headRefName": "eggert-ballot-review",
+      "headRefOid": "13b54ec107e598975cba344e70522f40b491fb33",
+      "closedAt": "2023-04-12T17:37:43Z",
+      "mergedAt": "2023-04-12T17:37:43Z",
+      "mergedBy": "bc-pi",
+      "mergeCommit": {
+        "oid": "5dbb2b3fc1735057935afe2c8278ee9496c0eb96"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
