@@ -106,8 +106,6 @@ The validation operations mentioned in step 2 and 6 imply that the resource serv
 
 "Authentication level" and "step-up" are metaphors in this specification. These metaphors do not suggest that there is an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of a level emerges from the fact that the resource server may only want to accept certain authentication methods. When presented with a token derived from a particular authentication method (i.e., a given authentication level) that it does not want to accept (i.e., below the threshold or level it will accept), the resource server seeks to "step-up" (i.e., renegotiate) from the current authentication level to one that it may accept. The "step-up" metaphor is intended to convey a shift from the original authentication level to one that is acceptable to the resource server.
 
-It is worthwhile to remark that the notion of "authentication level", as used in this document, represents an assessment the resource server performs on specific authentication methods, to arbitrarily determine whether it meets its own security criteria for the requested resource. "Authentication level" in this specification does not imply, requires nor refers to an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of level emerges from the fact that the resource server will accept some methods and reject others, hence establishing a way of comparing methods that meets the intuitive notion of "step up" .
-
 Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one - selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
 Also recall that OAuth 2.0 [@!RFC6749] assumes access tokens are treated as opaque by clients. The token format might be unreadable to the client or might change at any time to become unreadable. So, during the course of any token caching strategy, a client must not attempt to inspect the content of the access token to determine the associated authentication information or other details (see Section 6 of [@!RFC9068] for a more detailed discussion).
 
@@ -398,6 +396,10 @@ collaboration and community input.
 # Document History
 
    [[ To be removed from the final specification ]]
+
+-17
+
+* Fix mistake in -16 update
 
 -16
 
