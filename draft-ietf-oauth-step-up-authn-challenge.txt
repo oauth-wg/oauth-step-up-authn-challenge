@@ -233,17 +233,6 @@ Table of Contents
    the original authentication level to one that is acceptable to the
    resource server.
 
-   It is worthwhile to remark that the notion of "authentication level",
-   as used in this document, represents an assessment the resource
-   server performs on specific authentication methods, to arbitrarily
-   determine whether it meets its own security criteria for the
-   requested resource.  "Authentication level" in this specification
-   does not imply, requires nor refers to an absolute hierarchy of
-   authentication methods expressed in interoperable fashion.  The
-   notion of level emerges from the fact that the resource server will
-   accept some methods and reject others, hence establishing a way of
-   comparing methods that meets the intuitive notion of "step up" .
-
    Although the case in which the new access token supersedes old tokens
    by virtue of a higher authentication level is common, in line with
    the intuition the term "step-up authentication" suggests, it is
@@ -720,6 +709,10 @@ Appendix A.  Acknowledgements
 Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -17
+
+   *  Fix mistake in -16 update
 
    -16
 

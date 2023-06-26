@@ -1307,9 +1307,8 @@ The scenario assumes that, before the sequence described below takes place, the 
       </ol>
 <p id="section-2-4">The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication that occurred during the process by which the access token was obtained. In the context of this document, the assessment by the resource server of the specific authentication method used to obtain a token for the requested resource is called an "authentication level." This document will describe how the resource server can perform this assessment of an "authentication level" when the access token is a JWT Access token <span>[<a href="#RFC9068" class="cite xref">RFC9068</a>]</span> or is validated via introspection <span>[<a href="#RFC7662" class="cite xref">RFC7662</a>]</span>. Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification. Given an authentication level of a token, the resource server determines whether it meets the security criteria for the requested resource.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5">"Authentication level" and "step-up" are metaphors in this specification. These metaphors do not suggest that there is an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of a level emerges from the fact that the resource server may only want to accept certain authentication methods. When presented with a token derived from a particular authentication method (i.e., a given authentication level) that it does not want to accept (i.e., below the threshold or level it will accept), the resource server seeks to "step-up" (i.e., renegotiate) from the current authentication level to one that it may accept. The "step-up" metaphor is intended to convey a shift from the original authentication level to one that is acceptable to the resource server.<a href="#section-2-5" class="pilcrow">¶</a></p>
-<p id="section-2-6">It is worthwhile to remark that the notion of "authentication level", as used in this document, represents an assessment the resource server performs on specific authentication methods, to arbitrarily determine whether it meets its own security criteria for the requested resource. "Authentication level" in this specification does not imply, requires nor refers to an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of level emerges from the fact that the resource server will accept some methods and reject others, hence establishing a way of comparing methods that meets the intuitive notion of "step up" .<a href="#section-2-6" class="pilcrow">¶</a></p>
-<p id="section-2-7">Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one - selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
-Also recall that OAuth 2.0 <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> assumes access tokens are treated as opaque by clients. The token format might be unreadable to the client or might change at any time to become unreadable. So, during the course of any token caching strategy, a client must not attempt to inspect the content of the access token to determine the associated authentication information or other details (see Section 6 of <span>[<a href="#RFC9068" class="cite xref">RFC9068</a>]</span> for a more detailed discussion).<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-6">Although the case in which the new access token supersedes old tokens by virtue of a higher authentication level is common, in line with the intuition the term "step-up authentication" suggests, it is important to keep in mind that this might not necessarily hold true in the general case. For example: a resource server might require for a particular request a higher authentication level and a shorter validity, resulting in a token suitable for one-off calls but leading to frequent prompts, hence a suboptimal user experience, if reused for routine operations. In those scenarios, the client would be better served by keeping both the old tokens, associated with a lower authentication level, and the new one - selecting the appropriate token for each API call. This is not a new requirement for clients, as incremental consent and least privilege principles will require similar heuristics for managing access tokens associated to different scopes and permission levels. This document does not recommend any specific token caching strategy, as that will be dependent on the characteristics of every particular scenario and remains application-dependent as in the core OAuth cases.
+Also recall that OAuth 2.0 <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> assumes access tokens are treated as opaque by clients. The token format might be unreadable to the client or might change at any time to become unreadable. So, during the course of any token caching strategy, a client must not attempt to inspect the content of the access token to determine the associated authentication information or other details (see Section 6 of <span>[<a href="#RFC9068" class="cite xref">RFC9068</a>]</span> for a more detailed discussion).<a href="#section-2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="Challenge">
@@ -1677,116 +1676,121 @@ collaboration and community input.<a href="#appendix-A-3" class="pilcrow">¶</a>
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
       </h2>
 <p id="appendix-B-1">[[ To be removed from the final specification ]]<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">-16<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">-17<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-3.1">AD suggested editorial updates<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-3.1">Fix mistake in -16 update<a href="#appendix-B-3.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-4">-15<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">-16<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-5.1">Editorial updates from IESG review/ballot<a href="#appendix-B-5.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-5.1">AD suggested editorial updates<a href="#appendix-B-5.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-6">-14<a href="#appendix-B-6" class="pilcrow">¶</a></p>
+<p id="appendix-B-6">-15<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-7.1">Updates from Httpdir telechat review<a href="#appendix-B-7.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-7.1">Editorial updates from IESG review/ballot<a href="#appendix-B-7.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-8">-13<a href="#appendix-B-8" class="pilcrow">¶</a></p>
+<p id="appendix-B-8">-14<a href="#appendix-B-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-9.1">Make IETF the Change Controller for all registration requests per IANA suggestion<a href="#appendix-B-9.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-9.2">More updates from Genart review<a href="#appendix-B-9.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-9.3">Updates from Artart review<a href="#appendix-B-9.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-9.4">Updates from Secdir review<a href="#appendix-B-9.4" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-9.1">Updates from Httpdir telechat review<a href="#appendix-B-9.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-10">-12<a href="#appendix-B-10" class="pilcrow">¶</a></p>
+<p id="appendix-B-10">-13<a href="#appendix-B-10" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-11.1">Updates from Genart Last Call review<a href="#appendix-B-11.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-11.1">Make IETF the Change Controller for all registration requests per IANA suggestion<a href="#appendix-B-11.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-11.2">More updates from Genart review<a href="#appendix-B-11.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-11.3">Updates from Artart review<a href="#appendix-B-11.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-11.4">Updates from Secdir review<a href="#appendix-B-11.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-12">-11<a href="#appendix-B-12" class="pilcrow">¶</a></p>
+<p id="appendix-B-12">-12<a href="#appendix-B-12" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-13.1">Updates in the Protocol Overview section clarifying the nature of "authentication levels" and caching strategies, addressing AD review comments<a href="#appendix-B-13.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-13.1">Updates from Genart Last Call review<a href="#appendix-B-13.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-14">-10<a href="#appendix-B-14" class="pilcrow">¶</a></p>
+<p id="appendix-B-14">-11<a href="#appendix-B-14" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-15.1">Fix two references where the section numbers got lost presumably due to tooling issues<a href="#appendix-B-15.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-15.1">Updates in the Protocol Overview section clarifying the nature of "authentication levels" and caching strategies, addressing AD review comments<a href="#appendix-B-15.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-16">-09<a href="#appendix-B-16" class="pilcrow">¶</a></p>
+<p id="appendix-B-16">-10<a href="#appendix-B-16" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-17.1">Updates addressing AD review comments<a href="#appendix-B-17.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-17.1">Fix two references where the section numbers got lost presumably due to tooling issues<a href="#appendix-B-17.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-18">-07/-08<a href="#appendix-B-18" class="pilcrow">¶</a></p>
+<p id="appendix-B-18">-09<a href="#appendix-B-18" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-19.1">Editorial updates addressing Shepherd Review comments<a href="#appendix-B-19.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-19.1">Updates addressing AD review comments<a href="#appendix-B-19.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-20">-06<a href="#appendix-B-20" class="pilcrow">¶</a></p>
+<p id="appendix-B-20">-07/-08<a href="#appendix-B-20" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-21.1">Update examples/figures to be clear that the authorization request is sent by the client via directing the user agent (not directly from client to AS)<a href="#appendix-B-21.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-21.1">Editorial updates addressing Shepherd Review comments<a href="#appendix-B-21.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-22">-05<a href="#appendix-B-22" class="pilcrow">¶</a></p>
+<p id="appendix-B-22">-06<a href="#appendix-B-22" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-23.1">Forgotten Acknowledgements<a href="#appendix-B-23.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-23.2">Minor updates to the updates in -04<a href="#appendix-B-23.2" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-23.1">Update examples/figures to be clear that the authorization request is sent by the client via directing the user agent (not directly from client to AS)<a href="#appendix-B-23.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-24">-04<a href="#appendix-B-24" class="pilcrow">¶</a></p>
+<p id="appendix-B-24">-05<a href="#appendix-B-24" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-25.1">Editorial updates/notes from WGLC feedback<a href="#appendix-B-25.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-25.1">Forgotten Acknowledgements<a href="#appendix-B-25.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-25.2">Minor updates to the updates in -04<a href="#appendix-B-25.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-26">-03<a href="#appendix-B-26" class="pilcrow">¶</a></p>
+<p id="appendix-B-26">-04<a href="#appendix-B-26" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-27.1">Clarified that <code>acr_values</code> and <code>max_age</code> can co-occur in the challenge when necessary<a href="#appendix-B-27.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-27.2">fleshed out deployment and security considerations<a href="#appendix-B-27.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-27.3">fleshed out IANA considerations<a href="#appendix-B-27.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-27.4">Attempt to clarify that while <code>acr_values</code> can request more than one value, only one of them is used and ends up in the token<a href="#appendix-B-27.4" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-27.1">Editorial updates/notes from WGLC feedback<a href="#appendix-B-27.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-28">-02<a href="#appendix-B-28" class="pilcrow">¶</a></p>
+<p id="appendix-B-28">-03<a href="#appendix-B-28" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-29.1">Fix typos introduced in -01<a href="#appendix-B-29.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-29.1">Clarified that <code>acr_values</code> and <code>max_age</code> can co-occur in the challenge when necessary<a href="#appendix-B-29.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-29.2">Begin to fill out the Acknowledgements<a href="#appendix-B-29.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-29.2">fleshed out deployment and security considerations<a href="#appendix-B-29.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-29.3">fleshed out IANA considerations<a href="#appendix-B-29.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-29.4">Attempt to clarify that while <code>acr_values</code> can request more than one value, only one of them is used and ends up in the token<a href="#appendix-B-29.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-30">-01<a href="#appendix-B-30" class="pilcrow">¶</a></p>
+<p id="appendix-B-30">-02<a href="#appendix-B-30" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-31.1">Added AS Metadata section with pointer to <code>acr_values_supported</code><a href="#appendix-B-31.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-31.1">Fix typos introduced in -01<a href="#appendix-B-31.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-31.2">Mention that it's not necessarily the case that a new 'stepped-up' token always supersedes older tokens<a href="#appendix-B-31.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-31.3">Add examples with <code>max_age</code><a href="#appendix-B-31.3" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-31.2">Begin to fill out the Acknowledgements<a href="#appendix-B-31.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-32">-00 (Working Group Draft)<a href="#appendix-B-32" class="pilcrow">¶</a></p>
+<p id="appendix-B-32">-01<a href="#appendix-B-32" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-33.1">Initial WG revision (content unchanged from draft-bertocci-oauth-step-up-authn-challenge-01)<a href="#appendix-B-33.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-33.1">Added AS Metadata section with pointer to <code>acr_values_supported</code><a href="#appendix-B-33.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-33.2">Mention that it's not necessarily the case that a new 'stepped-up' token always supersedes older tokens<a href="#appendix-B-33.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-33.3">Add examples with <code>max_age</code><a href="#appendix-B-33.3" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-34">-01 draft-bertocci-oauth-step-up-authn-challenge<a href="#appendix-B-34" class="pilcrow">¶</a></p>
+<p id="appendix-B-34">-00 (Working Group Draft)<a href="#appendix-B-34" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-35.1">Fixed example<a href="#appendix-B-35.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-B-35.2">Clarified/noted that scope can also be in the WWW-Authenticate/401<a href="#appendix-B-35.2" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-35.1">Initial WG revision (content unchanged from draft-bertocci-oauth-step-up-authn-challenge-01)<a href="#appendix-B-35.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-B-36">-00 draft-bertocci-oauth-step-up-authn-challenge<a href="#appendix-B-36" class="pilcrow">¶</a></p>
+<p id="appendix-B-36">-01 draft-bertocci-oauth-step-up-authn-challenge<a href="#appendix-B-36" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-37.1">Initial Individual Draft (with all the authority thereby bestowed <a href="https://datatracker.ietf.org/doc/html/draft-abr-twitter-reply">https://datatracker.ietf.org/doc/html/draft-abr-twitter-reply</a>).<a href="#appendix-B-37.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-37.1">Fixed example<a href="#appendix-B-37.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-37.2">Clarified/noted that scope can also be in the WWW-Authenticate/401<a href="#appendix-B-37.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="appendix-B-38">-00 draft-bertocci-oauth-step-up-authn-challenge<a href="#appendix-B-38" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-39.1">Initial Individual Draft (with all the authority thereby bestowed <a href="https://datatracker.ietf.org/doc/html/draft-abr-twitter-reply">https://datatracker.ietf.org/doc/html/draft-abr-twitter-reply</a>).<a href="#appendix-B-39.1" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
