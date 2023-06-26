@@ -102,8 +102,9 @@ Figure: Abstract protocol flow {#abstract-flow}
 5. The client repeats the request from step 1, presenting the newly obtained access token.
 6. The resource server finds that the user authentication performed during the acquisition of the new access token complies with its requirements, and returns the representation of the requested protected resource.
 
-The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication level by which the access token was obtained. This document will describe how the resource server can perform that determination when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662].
-Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification.
+The validation operations mentioned in step 2 and 6 imply that the resource server has a way of evaluating the authentication that occurred during the process by which the access token was obtained. In the context of this document, the assessment by the resource server of the specific authentication method used to obtain a token for the requested resource is called an "authentication level." This document will describe how the resource server can perform this assessment of an "authentication level" when the access token is a JWT Access token [@RFC9068] or is validated via introspection [@RFC7662]. Other methods of determining the authentication level by which the access token was obtained are possible, per agreement by the authorization server and the protected resource, but are beyond the scope of this specification. Given an authentication level of a token, the resource server determines whether it meets the security criteria for the requested resource.
+
+"Authentication level" and "step-up" are metaphors in this specification. These metaphors do not suggest that there is an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of a level emerges from the fact that the resource server may only want to accept certain authentication methods. When presented with a token derived from a particular authentication method (i.e., a given authentication level) that it does not want to accept (i.e., below the threshold or level it will accept), the resource server seeks to "step-up" (i.e., renegotiate) from the current authentication level to one that it may accept. The "step-up" metaphor is intended to convey a shift from the original authentication level to one that is acceptable to the resource server.
 
 It is worthwhile to remark that the notion of "authentication level", as used in this document, represents an assessment the resource server performs on specific authentication methods, to arbitrarily determine whether it meets its own security criteria for the requested resource. "Authentication level" in this specification does not imply, requires nor refers to an absolute hierarchy of authentication methods expressed in interoperable fashion. The notion of level emerges from the fact that the resource server will accept some methods and reject others, hence establishing a way of comparing methods that meets the intuitive notion of "step up" .
 
@@ -397,6 +398,10 @@ collaboration and community input.
 # Document History
 
    [[ To be removed from the final specification ]]
+
+-16
+
+*  AD suggested editorial updates
 
 -15
 
