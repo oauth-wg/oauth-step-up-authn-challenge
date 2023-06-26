@@ -5,8 +5,8 @@
 Web Authorization Protocol                                   V. Bertocci
 Internet-Draft                                                Auth0/Okta
 Intended status: Standards Track                             B. Campbell
-Expires: 15 October 2023                                   Ping Identity
-                                                           13 April 2023
+Expires: 28 December 2023                                  Ping Identity
+                                                            26 June 2023
 
 
           OAuth 2.0 Step-up Authentication Challenge Protocol
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 October 2023.
+   This Internet-Draft will expire on 28 December 2023.
 
 Copyright Notice
 
@@ -204,14 +204,34 @@ Table of Contents
        protected resource.
 
    The validation operations mentioned in step 2 and 6 imply that the
-   resource server has a way of evaluating the authentication level by
-   which the access token was obtained.  This document will describe how
-   the resource server can perform that determination when the access
-   token is a JWT Access token [RFC9068] or is validated via
-   introspection [RFC7662].  Other methods of determining the
-   authentication level by which the access token was obtained are
-   possible, per agreement by the authorization server and the protected
-   resource, but are beyond the scope of this specification.
+   resource server has a way of evaluating the authentication that
+   occurred during the process by which the access token was obtained.
+   In the context of this document, the assessment by the resource
+   server of the specific authentication method used to obtain a token
+   for the requested resource is called an "authentication level."  This
+   document will describe how the resource server can perform this
+   assessment of an "authentication level" when the access token is a
+   JWT Access token [RFC9068] or is validated via introspection
+   [RFC7662].  Other methods of determining the authentication level by
+   which the access token was obtained are possible, per agreement by
+   the authorization server and the protected resource, but are beyond
+   the scope of this specification.  Given an authentication level of a
+   token, the resource server determines whether it meets the security
+   criteria for the requested resource.
+
+   "Authentication level" and "step-up" are metaphors in this
+   specification.  These metaphors do not suggest that there is an
+   absolute hierarchy of authentication methods expressed in
+   interoperable fashion.  The notion of a level emerges from the fact
+   that the resource server may only want to accept certain
+   authentication methods.  When presented with a token derived from a
+   particular authentication method (i.e., a given authentication level)
+   that it does not want to accept (i.e., below the threshold or level
+   it will accept), the resource server seeks to "step-up" (i.e.,
+   renegotiate) from the current authentication level to one that it may
+   accept.  The "step-up" metaphor is intended to convey a shift from
+   the original authentication level to one that is acceptable to the
+   resource server.
 
    It is worthwhile to remark that the notion of "authentication level",
    as used in this document, represents an assessment the resource
@@ -630,11 +650,11 @@ Table of Contents
 
    [I-D.ietf-oauth-dpop]
               Fett, D., Campbell, B., Bradley, J., Lodderstedt, T.,
-              Jones, M., and D. Waite, "OAuth 2.0 Demonstrating Proof-
-              of-Possession at the Application Layer (DPoP)", Work in
-              Progress, Internet-Draft, draft-ietf-oauth-dpop-14, 8
-              March 2023, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-oauth-dpop-14>.
+              Jones, M. B., and D. Waite, "OAuth 2.0 Demonstrating
+              Proof-of-Possession at the Application Layer (DPoP)", Work
+              in Progress, Internet-Draft, draft-ietf-oauth-dpop-16, 13
+              April 2023, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-oauth-dpop-16>.
 
    [IANA.OAuth.Params]
               IANA, "OAuth Parameters",
@@ -700,6 +720,10 @@ Appendix A.  Acknowledgements
 Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -16
+
+   *  AD suggested editorial updates
 
    -15
 
